@@ -1,0 +1,51 @@
+{
+  "id": "2667753",
+  "name": "投资助手-uni-app",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "2254930",
+      "name": "没有数据",
+      "font_class": "nodata",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "985204",
+      "name": "太极鱼",
+      "font_class": "logo",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "1221238",
+      "name": "助手2",
+      "font_class": "zhushou",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "2471360",
+      "name": "工具",
+      "font_class": "gongju",
+      "unicode": "e66f",
+      "unicode_decimal": 58991
+    },
+    {
+      "icon_id": "16402793",
+      "name": "资产管理",
+      "font_class": "zichanguanli",
+      "unicode": "e6d3",
+      "unicode_decimal": 59091
+    },
+    {
+      "icon_id": "21830725",
+      "name": "首页",
+      "font_class": "shouye",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    }
+  ]
+}

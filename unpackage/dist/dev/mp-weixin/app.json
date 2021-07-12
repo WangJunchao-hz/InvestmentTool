@@ -1,0 +1,53 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/assistant/index",
+    "pages/assets/index",
+    "pages/tools/index"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#000000",
+    "selectedColor": "#007AFF",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "height": "50px",
+    "fontSize": "10px",
+    "iconWidth": "24px",
+    "spacing": "3px",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "static/images/shouye.png",
+        "selectedIconPath": "static/images/shouye-active.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/assistant/index",
+        "iconPath": "static/images/zhushou.png",
+        "selectedIconPath": "static/images/zhushou-active.png",
+        "text": "助手"
+      },
+      {
+        "pagePath": "pages/assets/index",
+        "iconPath": "static/images/zichan.png",
+        "selectedIconPath": "static/images/zichan-active.png",
+        "text": "资产"
+      },
+      {
+        "pagePath": "pages/tools/index",
+        "iconPath": "static/images/gongju.png",
+        "selectedIconPath": "static/images/gongju-active.png",
+        "text": "工具"
+      }
+    ]
+  },
+  "usingComponents": {},
+  "sitemapLocation": "sitemap.json"
+}
