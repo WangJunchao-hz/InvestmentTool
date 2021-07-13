@@ -29,9 +29,9 @@
   width: 100%;
   text-align: center;
   color: #909399;
-  font-size: 32px;
+  font-size: 18px;
 }
-.no-data .icon-nodata.data-v-1a4b7c72 {
-  font-size: 188px;
+.no-data .iconfont.data-v-1a4b7c72 {
+  font-size: 88px;
 }
 

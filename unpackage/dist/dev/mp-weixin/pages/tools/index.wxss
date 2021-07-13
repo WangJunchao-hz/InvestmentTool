@@ -27,7 +27,8 @@
 .tools.data-v-1fbca8b5 {
   padding: 16px;
 }
-.tools .tool-grid-item.data-v-1fbca8b5 {
+.tools.data-v-1fbca8b5  .uni-grid-item--border-top {
+  padding: 16px 0;
   text-align: center;
 }
 

@@ -1,6 +1,6 @@
 <template>
 	<view class="no-data">
-		<icon type="#909399" class="iconfont icon-nodata"></icon>
+		<text class="iconfont">&#xe600;</text>
 		<view>暂无数据</view>
 	</view>
 </template>
@@ -22,9 +22,10 @@
 		width: 100%;
 		text-align: center;
 		color: #909399;
-		font-size: 32px;
-		.icon-nodata{
-			font-size: 188px;
+		font-size: 18px;
+
+		.iconfont {
+			font-size: 88px;
 		}
 	}
 </style>

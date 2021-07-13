@@ -19,6 +19,11 @@
 		"style": {
 			"navigationBarTitleText": "工具"
 		}
+	}, {
+		"path": "pages/add/index",
+		"style": {
+			"navigationBarTitleText": ""
+		}
 	}],
 	"tabBar": {
 		"color": "#000000",
@@ -49,7 +54,11 @@
 			"iconPath": "static/images/gongju.png",
 			"selectedIconPath": "static/images/gongju-active.png",
 			"text": "工具"
-		}]
+		}],
+		"midButton": {
+			"iconPath": "static/images/add.png",
+			"iconWidth": "100%"
+		}
 	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
