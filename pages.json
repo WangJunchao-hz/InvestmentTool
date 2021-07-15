@@ -10,19 +10,29 @@
 			"navigationBarTitleText": "助手"
 		}
 	}, {
+		"path": "pages/assistant/add/index",
+		"style": {
+			"navigationBarTitleText": "添加计划"
+		}
+	},{
 		"path": "pages/assets/index",
 		"style": {
 			"navigationBarTitleText": "资产"
 		}
 	}, {
+		"path": "pages/assets/add/index",
+		"style": {
+			"navigationBarTitleText": "添加资产"
+		}
+	},{
 		"path": "pages/tools/index",
 		"style": {
 			"navigationBarTitleText": "工具"
 		}
-	}, {
-		"path": "pages/add/index",
+	},{
+		"path": "pages/tools/add/index",
 		"style": {
-			"navigationBarTitleText": ""
+			"navigationBarTitleText": "添加工具"
 		}
 	}],
 	"tabBar": {
@@ -54,15 +64,11 @@
 			"iconPath": "static/images/gongju.png",
 			"selectedIconPath": "static/images/gongju-active.png",
 			"text": "工具"
-		}],
-		"midButton": {
-			"iconPath": "static/images/add.png",
-			"iconWidth": "100%"
-		}
+		}]
 	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
+		"navigationBarTitleText": "鱼川",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8",
 		"app-plus": {

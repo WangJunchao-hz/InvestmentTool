@@ -387,7 +387,7 @@
 
 	.uni-fab__content--other-platform {
 		border-width: 0px;
-		box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
+		box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.1);
 	}
 
 	.uni-fab__content--left {

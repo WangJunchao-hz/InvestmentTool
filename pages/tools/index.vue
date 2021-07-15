@@ -6,7 +6,7 @@
 				<text class="text">{{list.text}}</text>
 			</uni-grid-item>
 		</uni-grid>
-		<no-data v-if="toolLists.length"></no-data>
+		<no-data v-if="!toolLists.length"></no-data>
 	</view>
 </template>
 

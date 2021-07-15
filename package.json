@@ -1,0 +1,23 @@
+{
+  "name": "InvestmentTool",
+  "version": "1.0.0",
+  "description": "通过uni-app开发的一款全端应用",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wanglujiu/InvestmentTool.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wanglujiu/InvestmentTool/issues"
+  },
+  "homepage": "https://github.com/wanglujiu/InvestmentTool#readme",
+  "dependencies": {
+    "mathjs": "^9.4.4"
+  }
+}

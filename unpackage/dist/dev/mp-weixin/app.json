@@ -2,14 +2,16 @@
   "pages": [
     "pages/index/index",
     "pages/assistant/index",
+    "pages/assistant/add/index",
     "pages/assets/index",
+    "pages/assets/add/index",
     "pages/tools/index",
-    "pages/add/index"
+    "pages/tools/add/index"
   ],
   "subPackages": [],
   "window": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "uni-app",
+    "navigationBarTitleText": "鱼川",
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8"
   },
@@ -47,11 +49,7 @@
         "selectedIconPath": "static/images/gongju-active.png",
         "text": "工具"
       }
-    ],
-    "midButton": {
-      "iconPath": "static/images/add.png",
-      "iconWidth": "100%"
-    }
+    ]
   },
   "usingComponents": {}
 }

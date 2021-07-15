@@ -1,1 +1,1 @@
-<view class="data-v-57280228"></view>
+<view class="data-v-57280228"><uni-fab vue-id="8dd740cc-1" pattern="{{pattern}}" horizontal="right" content="{{fastNav}}" data-event-opts="{{[['^trigger',[['fabTrigger']]]]}}" bind:trigger="__e" class="data-v-57280228" bind:__l="__l"></uni-fab></view>
