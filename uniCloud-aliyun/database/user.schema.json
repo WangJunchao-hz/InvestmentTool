@@ -1,0 +1,24 @@
+// 文档教程: https://uniapp.dcloud.net.cn/uniCloud/schema
+{
+	"bsonType": "object",
+	"required": [],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": false
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"openid": {
+			"bsonType": "string",
+			"description": "用户唯一标识"
+		},
+		"userInfo": {
+			"bsonType": "object",
+			"description": "用户信息"
+		}
+	}
+}

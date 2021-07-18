@@ -5,6 +5,9 @@
 </template>
 
 <script>
+	import {
+		EventBus
+	} from '../../tools/event-bus.js'
 	export default {
 		data() {
 			return {
@@ -17,7 +20,7 @@
 					selectedIconPath: "/static/images/zhushou-active.png",
 					text: "计划",
 					active: false,
-					path: '/pages/assistant/add/index'
+					path: '/pages/assistant/add'
 				}, {
 					iconPath: "/static/images/zichan.png",
 					selectedIconPath: "/static/images/zichan-active.png",
@@ -29,12 +32,15 @@
 					selectedIconPath: "/static/images/gongju-active.png",
 					text: "工具",
 					active: false,
-					path: '/pages/tools/add/index'
+					path: '/pages/tools/add'
 				}]
 			}
 		},
-		created() {},
-		mounted() {},
+		onReady() {
+			EventBus.$on('AppReady', (userId) => {
+				// console.log(userId);
+			})
+		},
 		methods: {
 			fabTrigger(val) {
 				this.fastNav[val.index].active = !this.fastNav[val.index].active

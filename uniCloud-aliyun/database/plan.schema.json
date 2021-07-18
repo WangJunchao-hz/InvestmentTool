@@ -1,0 +1,40 @@
+// 文档教程: https://uniapp.dcloud.net.cn/uniCloud/schema
+{
+	"bsonType": "object",
+	"required": ["planName"],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"userId":{
+			"bsonType":"string",
+			"description":"用户唯一标识"
+		},
+		"planName": {
+			"bsonType": "string",
+			"trim": "both",
+			"maxLength": 8,
+			"label": "计划名称",
+			"description": "请输入"
+		},
+		"planType": {
+			"bsonType": "object",
+			"label": "计划类型"
+		},
+		"remarks": {
+			"bsonType": "string",
+			"label": "备注"
+		},
+		"planDetails": {
+			"bsonType": "array",
+			"arrayType": "object",
+			"description": "计划详情"
+		}
+	}
+}

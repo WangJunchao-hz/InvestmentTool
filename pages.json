@@ -10,29 +10,19 @@
 			"navigationBarTitleText": "助手"
 		}
 	}, {
-		"path": "pages/assistant/add/index",
+		"path": "pages/assistant/add",
 		"style": {
-			"navigationBarTitleText": "添加计划"
+			"navigationBarTitleText": "新增计划"
 		}
-	},{
+	}, {
 		"path": "pages/assets/index",
 		"style": {
 			"navigationBarTitleText": "资产"
 		}
 	}, {
-		"path": "pages/assets/add/index",
-		"style": {
-			"navigationBarTitleText": "添加资产"
-		}
-	},{
 		"path": "pages/tools/index",
 		"style": {
 			"navigationBarTitleText": "工具"
-		}
-	},{
-		"path": "pages/tools/add/index",
-		"style": {
-			"navigationBarTitleText": "添加工具"
 		}
 	}],
 	"tabBar": {

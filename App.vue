@@ -1,19 +1,105 @@
 <script>
+	import {
+		EventBus
+	} from './tools/event-bus.js'
 	export default {
-		onLaunch: function() {
+		globalData: {
+			userId: ''
+		},
+		onLaunch() {
 			console.log('App Launch')
-			uni.onTabBarMidButtonTap(() => {
-				console.log(111);
-				uni.navigateTo({
-					url: '/pages/add/index'
-				})
-			})
+			const _this = this
+			// 登录处理逻辑
+			uni.getProvider({
+				service: 'oauth',
+				success: function(res) {
+					_this.doLogin(res.provider)
+				},
+				fail(err) {
+					console.error(err);
+					_this.doLogin(['weixin'])
+				}
+			});
 		},
 		onShow: function() {
 			console.log('App Show')
 		},
 		onHide: function() {
 			console.log('App Hide')
+		},
+		methods: {
+			doLogin(provider) {
+				const _this = this
+				if (provider.indexOf('weixin') !== -1) {
+					uni.checkSession({
+						success(res) {
+							console.info(res);
+							_this.getUserInfo('weixin')
+						},
+						fail(err) {
+							console.error(err);
+							uni.login({
+								provider: 'weixin',
+								success: function(res) {
+									console.info('登录成功');
+									_this.getUserInfo('weixin', res.code)
+								},
+								fail(err) {
+									console.error("登录失败", err);
+									uni.showToast({
+										title: "登录失败",
+										icon: "none"
+									})
+								}
+							});
+						}
+					})
+				}
+			},
+			getUserInfo(provider, code) {
+				const _this = this
+				if (code) {
+					uni.request({
+						url: `https://api.weixin.qq.com/sns/jscode2session?appid=wx825c0da82f49974d&secret=8601776d7c6105b09f330701097f5864&js_code=${code}&grant_type=authorization_code`,
+						success(res) {
+							uni.setStorage({
+								key: 'openid',
+								data: res.data.openid,
+								success() {
+									_this.initApp(res.data.openid)
+									uni.getUserInfo({
+										provider,
+										success(res1) {
+											uniCloud.database().collection('user').add({
+												openid: res.data.openid,
+												userInfo: res1.userInfo
+											})
+										}
+									})
+								}
+							});
+						},
+						fail(err) {
+							console.error(err)
+							uni.showToast({
+								title: "获取用户信息失败",
+								icon: "none"
+							})
+						}
+					})
+				} else {
+					uni.getStorage({
+						key: 'openid',
+						success: function(res) {
+							_this.initApp(res.data)
+						}
+					});
+				}
+			},
+			initApp(openid) {
+				getApp().globalData.userId = openid
+				EventBus.$emit('AppReady', openid)
+			}
 		}
 	}
 </script>

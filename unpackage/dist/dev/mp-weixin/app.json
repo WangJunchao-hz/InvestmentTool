@@ -2,11 +2,9 @@
   "pages": [
     "pages/index/index",
     "pages/assistant/index",
-    "pages/assistant/add/index",
+    "pages/assistant/add",
     "pages/assets/index",
-    "pages/assets/add/index",
-    "pages/tools/index",
-    "pages/tools/add/index"
+    "pages/tools/index"
   ],
   "subPackages": [],
   "window": {
