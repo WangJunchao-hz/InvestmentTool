@@ -12,9 +12,9 @@
 		"_id": {
 			"description": "ID，系统自动生成"
 		},
-		"userId":{
-			"bsonType":"string",
-			"description":"用户唯一标识"
+		"userId": {
+			"bsonType": "string",
+			"description": "用户唯一标识"
 		},
 		"planName": {
 			"bsonType": "string",
@@ -35,6 +35,14 @@
 			"bsonType": "array",
 			"arrayType": "object",
 			"description": "计划详情"
+		},
+		"createDate": {
+			"bsonType": "timestamp",
+			"description": "创建时间"
+		},
+		"updateDate": {
+			"bsonType": "timestamp",
+			"description": "更新时间"
 		}
 	}
 }

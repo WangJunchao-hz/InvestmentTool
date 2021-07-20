@@ -1,0 +1,102 @@
+// 文档教程: https://uniapp.dcloud.net.cn/uniCloud/schema
+{
+	"bsonType": "object",
+	"required": ["buyAveragePrice", "buyAmount", "sellAveragePrice", "sellAmount", "targetPercent"],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"planId": {
+			"bsonType": "string",
+			"description": "计划id"
+		},
+		"buyAveragePrice": {
+			"bsonType": "double",
+			"label":"买入均价",
+			"minimum":0,
+			"description": "买入均价"
+		},
+		"buyAmount": {
+			"bsonType": "double",
+			"label":"买入金额",
+			"minimum":0,
+			"description": "买入金额"
+		},
+		"sellAveragePrice": {
+			"bsonType": "double",
+			"label":"卖出均价",
+			"minimum":0,
+			"description": "卖出均价"
+		},
+		"sellAmount": {
+			"bsonType": "double",
+			"label":"卖出金额",
+			"minimum":0,
+			"description": "卖出金额"
+		},
+		"cost": {
+			"bsonType": "double",
+			"description": "费用"
+		},
+		"isProfit": {
+			"bsonType": "bool",
+			"description": "是否盈利",
+			"defaultValue": "true"
+		},
+		"loss": {
+			"bsonType": "double",
+			"description": "损失金额"
+		},
+		"profit": {
+			"bsonType": "double",
+			"description": "盈利金额"
+		},
+		"percentage": {
+			"bsonType": "double",
+			"description": "盈亏百分比"
+		},
+		"pricePercent": {
+			"bsonType": "double",
+			"description": "价格浮动百分比"
+		},
+		"amount": {
+			"bsonType": "int",
+			"description": "建议操作的数量级",
+			"defaultValue": "1"
+		},
+		"targetPercent": {
+			"bsonType": "double",
+			"label":"止损百分比",
+			"minimum":0,
+			"description": "目标浮动百分比",
+			"defaultValue": "10"
+		},
+		"targetPrice": {
+			"bsonType": "double",
+			"description": "目标价格"
+		},
+		"preAdvise": {
+			"bsonType": "string",
+			"description": "操作建议"
+		},
+		"operationRecord": {
+			"bsonType": "array",
+			"arrayType": "object",
+			"description": "操作明细"
+		},
+		"createDate": {
+			"bsonType": "timestamp",
+			"description": "创建时间"
+		},
+		"updateDate": {
+			"bsonType": "timestamp",
+			"description": "更新时间"
+		}
+	}
+}

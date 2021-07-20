@@ -92,6 +92,23 @@
 						key: 'openid',
 						success: function(res) {
 							_this.initApp(res.data)
+						},
+						fail(err) {
+							console.error(err);
+							uni.login({
+								provider: 'weixin',
+								success: function(res) {
+									console.info('登录成功');
+									_this.getUserInfo('weixin', res.code)
+								},
+								fail(err) {
+									console.error("登录失败", err);
+									uni.showToast({
+										title: "登录失败",
+										icon: "none"
+									})
+								}
+							});
 						}
 					});
 				}
@@ -104,7 +121,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	@font-face {
 		font-family: 'iconfont';
 		/* Project id 2667753 */
@@ -119,5 +136,28 @@
 		font-style: normal;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
+	}
+
+	.group {
+		&__title {
+			display: flex;
+			align-items: center;
+			padding-left: 15px;
+			color: #303133;
+			font-size: 16px;
+
+			&::before {
+				content: '';
+				margin-right: 8px;
+				display: inline-block;
+				width: 2px;
+				height: 16px;
+				background-color: #409EFF;
+			}
+		}
+
+		.uni-group__content {
+			padding: 15px 0 !important;
+		}
 	}
 </style>

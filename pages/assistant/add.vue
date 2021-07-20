@@ -92,11 +92,14 @@
 			},
 
 			submitForm() {
+				const time = new Date().getTime();
 				const params = {
 					userId: this.userId,
 					...this.formData,
 					planType: this.planType,
-					planDetails: []
+					planDetails: [],
+					createDate: time,
+					updateDate: time
 				}
 				console.log(params);
 				// 使用 clientDB 提交数据
@@ -106,11 +109,10 @@
 						title: '新增成功'
 					})
 					this.getOpenerEventChannel().emit('refreshData')
-					setTimeout(() => 
+					setTimeout(() =>
 						uni.switchTab({
-							url:"/pages/assistant/index"
-						})
-					, 500)
+							url: "/pages/assistant/index"
+						}), 500)
 				}).catch((err) => {
 					uni.showModal({
 						content: err.message || '请求服务失败',

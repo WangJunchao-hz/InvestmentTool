@@ -3,6 +3,7 @@
     "pages/index/index",
     "pages/assistant/index",
     "pages/assistant/add",
+    "pages/assistant/detail",
     "pages/assets/index",
     "pages/tools/index"
   ],

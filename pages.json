@@ -15,6 +15,11 @@
 			"navigationBarTitleText": "新增计划"
 		}
 	}, {
+		"path": "pages/assistant/detail",
+		"style": {
+			"navigationBarTitleText": "计划详情"
+		}
+	}, {
 		"path": "pages/assets/index",
 		"style": {
 			"navigationBarTitleText": "资产"
