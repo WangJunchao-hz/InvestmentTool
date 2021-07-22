@@ -60,33 +60,51 @@
 				const _this = this
 				if (code) {
 					uni.request({
-						url: `https://api.weixin.qq.com/sns/jscode2session?appid=wx825c0da82f49974d&secret=8601776d7c6105b09f330701097f5864&js_code=${code}&grant_type=authorization_code`,
+						url: `https://a66382c2-33a3-4481-ac46-85f29505c5fe.bspapp.com/http/login?code=${code}`,
 						success(res) {
+							console.log(res);
+						},
+						fail(err) {
+							console.error(err);
+							uni.showToast({
+								title: "获取用户信息失败11:" + JSON.stringify(err),
+								icon: "none"
+							})
+						}
+					})
+					uniCloud.callFunction({
+						name: "login",
+						data: {
+							code
+						}
+					}).then(res => {
+						console.log(res);
+						if (res && res.result && res.result.data) {
+							const data = res.result.data;
 							uni.setStorage({
 								key: 'openid',
-								data: res.data.openid,
+								data: data.openid,
 								success() {
-									_this.initApp(res.data.openid)
+									_this.initApp(data.openid);
 									uni.getUserInfo({
 										provider,
 										success(res1) {
 											uniCloud.database().collection('user').add({
-												openid: res.data.openid,
+												openid: data.openid,
 												userInfo: res1.userInfo
 											})
 										}
 									})
 								}
 							});
-						},
-						fail(err) {
-							console.error(err)
-							uni.showToast({
-								title: "获取用户信息失败",
-								icon: "none"
-							})
 						}
-					})
+					}).catch(err => {
+						console.error(err)
+						uni.showToast({
+							title: "获取用户信息失败:" + JSON.stringify(err),
+							icon: "none"
+						})
+					});
 				} else {
 					uni.getStorage({
 						key: 'openid',

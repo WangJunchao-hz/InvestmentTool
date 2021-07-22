@@ -20,7 +20,7 @@
 					</uni-grid-item>
 					<uni-grid-item>
 						<view class="grid-item-box">
-							<button plain style="border-color: #F56C6C; color: #F56C6C;" @click="opClick(1)">买
+							<button :disabled="detailData.opType === 'buy'" plain style="border-color: #F56C6C; color: #F56C6C;" @click="opClick(1)">买
 								入</button>
 						</view>
 					</uni-grid-item>
@@ -38,7 +38,7 @@
 					</uni-grid-item>
 					<uni-grid-item>
 						<view class="grid-item-box">
-							<button plain style="border-color: #67C23A; color: #67C23A;" @click="opClick(0)">卖
+							<button :disabled="detailData.opType === 'sell'" plain style="border-color: #67C23A; color: #67C23A;" @click="opClick(0)">卖
 								出</button>
 						</view>
 					</uni-grid-item>
@@ -281,19 +281,16 @@
 			},
 			getParams() {
 				const time = new Date().getTime();
-				const lastInfo = this.detailData;
-				const params = {
-					planId: this.planId,
-					buyAmount: Number(this.formData.buyAmount),
-					totalBuyAmount: 0,
-					sellAmount: Number(this.formData.sellAmount),
-					totalSellAmount: 0,
-					targetPercent: Number(this.formData.targetPercent),
+				const lastInfo = this.detailData ? this.detailData : {
+					buyAmount: 0,
+					sellAmount: 0,
 					position: this.formData.position,
+					targetPercent: this.formData.targetPercent,
+					totalBuyAmount: 0,
+					totalSellAmount: 0,
 					isProfit: true,
 					isOnceProfit: true,
 					isTotalProfit: true,
-					opType: this.opType === 1 ? 'buy' : 'sell',
 					profitAdnLoss: 0,
 					onceProfitAdnLoss: 0,
 					totalProfitAdnLoss: 0,
@@ -302,8 +299,23 @@
 					totalPercentage: 0,
 					preAdvise: '',
 					isComplete: false,
-					updateDate: time,
 					createDate: time
+				};
+				const params = {
+					...lastInfo,
+					planId: this.planId,
+					opType: this.opType === 1 ? 'buy' : 'sell',
+					updateDate: time
+				}
+				if (this.formData.buyAmount) {
+					params.buyAmount = Number(this.formData.buyAmount);
+				}
+				if (this.formData.sellAmount) {
+					params.sellAmount = Number(this.formData.sellAmount);
+				}
+				if (this.opType === 1) {
+					params.position = this.formData.position;
+					params.targetPercent = this.formData.targetPercent;
 				}
 				switch (this.opType) {
 					case 0: // 卖出
@@ -313,6 +325,9 @@
 						this.handleBuy(params, lastInfo);
 						break;
 				}
+				if (params && params._id) {
+					delete params._id
+				}
 				this.addRecord(params)
 				console.log(params);
 				return params;
@@ -320,10 +335,6 @@
 			handleBuy(params, lastInfo) {
 				if (lastInfo && lastInfo._id) {
 					params.totalBuyAmount = this.$evaluate(lastInfo.totalBuyAmount + params.buyAmount);
-					params.totalProfitAdnLoss = lastInfo.totalProfitAdnLoss;
-					params.onceProfitAdnLoss = lastInfo.onceProfitAdnLoss;
-					params.totalPercentage = lastInfo.totalPercentage;
-					params.oncePercentage = lastInfo.oncePercentage;
 				} else {
 					params.totalBuyAmount = params.buyAmount;
 				}
@@ -337,11 +348,16 @@
 				params.profitAdnLoss = this.$evaluate(params.sellAmount - lastInfo.buyAmount);
 				params.isProfit = params.profitAdnLoss < 0 ? false : true;
 				params.percentage = Number((this.$evaluate(params.profitAdnLoss / lastInfo.buyAmount * 100)).toFixed(2));
-				params.oncePercentage = this.$evaluate(lastInfo.oncePercentage + params.percentage);
+				if (lastInfo.onceProfitAdnLoss > 0) {
+					params.onceProfitAdnLoss = params.profitAdnLoss;
+					params.oncePercentage = params.percentage;
+				} else {
+					params.onceProfitAdnLoss = this.$evaluate(lastInfo.onceProfitAdnLoss + params.profitAdnLoss);
+					params.oncePercentage = this.$evaluate(lastInfo.oncePercentage + params.percentage);
+					params.isComplete = params.onceProfitAdnLoss > 0 ? true : false;
+				}
 				const position = Math.abs(Math.floor(this.$evaluate(params.oncePercentage / lastInfo.targetPercent)))
 				params.preAdvise = `下次买入建议加仓${position}`
-				console.log(this.$evaluate(params.oncePercentage / lastInfo.targetPercent));
-				params.buyAmount = lastInfo.buyAmount;
 			},
 			resetForm() {
 				this.formData.buyAmount = '';
