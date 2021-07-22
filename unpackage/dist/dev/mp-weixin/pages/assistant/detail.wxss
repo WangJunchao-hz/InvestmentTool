@@ -56,7 +56,7 @@
           flex-direction: column;
 }
 .steps__text.data-v-7ae00c1b {
-  padding: 6px 0px;
+  padding: 6px 15px 6px 0;
   border-bottom-style: solid;
   border-bottom-width: 1px;
   border-bottom-color: #e5e5e5;
@@ -70,6 +70,14 @@
 }
 .steps__text.active.data-v-7ae00c1b {
   color: #67C23A;
+}
+.steps__text--item.data-v-7ae00c1b {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+}
+.steps__text--item-text.data-v-7ae00c1b {
+  width: 33.3%;
 }
 .steps__line-item.data-v-7ae00c1b {
   display: -webkit-box;

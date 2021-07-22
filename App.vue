@@ -160,4 +160,38 @@
 			padding: 15px 0 !important;
 		}
 	}
+
+	.grid-item-box {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 15px 0;
+		color: #303133;
+	}
+
+	.success {
+		color: #67C23A;
+	}
+
+	.warning {
+		color: #E6A23C;
+	}
+
+	.danger {
+		color: #F56C6C;
+	}
+
+	.info {
+		color: #909399;
+	}
+
+	.primary {
+		color: #409EFF;
+	}
+
+	.normal {
+		color: #303133;
+	}
 </style>

@@ -2,6 +2,7 @@
 	<view class="no-data">
 		<text class="iconfont">&#xe600;</text>
 		<view>暂无数据</view>
+		<slot></slot>
 	</view>
 </template>
 

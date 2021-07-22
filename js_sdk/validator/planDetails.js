@@ -2,20 +2,6 @@
 
 
 const validator = {
-  "buyAveragePrice": {
-    "rules": [
-      {
-        "required": true
-      },
-      {
-        "format": "double"
-      },
-      {
-        "minimum": 0
-      }
-    ],
-    "label": "买入均价"
-  },
   "buyAmount": {
     "rules": [
       {
@@ -29,20 +15,6 @@ const validator = {
       }
     ],
     "label": "买入金额"
-  },
-  "sellAveragePrice": {
-    "rules": [
-      {
-        "required": true
-      },
-      {
-        "format": "double"
-      },
-      {
-        "minimum": 0
-      }
-    ],
-    "label": "卖出均价"
   },
   "sellAmount": {
     "rules": [
@@ -67,11 +39,28 @@ const validator = {
         "format": "double"
       },
       {
-        "minimum": 0
+        "minimum": 0,
+        "maximum": 100
       }
     ],
-    "label": "止损百分比",
-    "defaultValue": "10"
+    "label": "加仓百分比",
+    "defaultValue": 10
+  },
+  "position": {
+    "rules": [
+      {
+        "required": true
+      },
+      {
+        "format": "int"
+      },
+      {
+        "minimum": 1,
+        "maximum": 10
+      }
+    ],
+    "label": "仓位",
+    "defaultValue": 1
   }
 }
 

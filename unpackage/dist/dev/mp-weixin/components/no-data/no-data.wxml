@@ -1,1 +1,1 @@
-<view class="no-data data-v-1a4b7c72"><text class="iconfont data-v-1a4b7c72"></text><view class="data-v-1a4b7c72">暂无数据</view></view>
+<view class="no-data data-v-1a4b7c72"><text class="iconfont data-v-1a4b7c72"></text><view class="data-v-1a4b7c72">暂无数据</view><slot></slot></view>
