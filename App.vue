@@ -62,49 +62,65 @@
 					uni.request({
 						url: `https://a66382c2-33a3-4481-ac46-85f29505c5fe.bspapp.com/http/login?code=${code}`,
 						success(res) {
-							console.log(res);
+							if (res.data && res.data.status === 200 && res.data.data) {
+								const data = res.data.data;
+								uni.getStorage({
+									key: 'openid',
+									success(res) {
+										if (res.data === data.openid) {
+											_this.initApp(data.openid);
+										} else {
+											uni.setStorage({
+												key: 'openid',
+												data: data.openid,
+												success() {
+													_this.initApp(data.openid);
+													uni.getUserInfo({
+														provider,
+														success(res1) {
+															uniCloud.database().collection(
+																'user').add({
+																openid: data
+																	.openid,
+																userInfo: res1
+																	.userInfo
+															})
+														}
+													})
+												}
+											});
+										}
+									},
+									fail() {
+										uni.setStorage({
+											key: 'openid',
+											data: data.openid,
+											success() {
+												_this.initApp(data.openid);
+												uni.getUserInfo({
+													provider,
+													success(res1) {
+														uniCloud.database().collection(
+															'user').add({
+															openid: data.openid,
+															userInfo: res1.userInfo
+														})
+													}
+												})
+											}
+										});
+									}
+								})
+							}
 						},
 						fail(err) {
 							console.error(err);
 							uni.showToast({
-								title: "获取用户信息失败11:" + JSON.stringify(err),
+								title: "获取用户信息失败:" + JSON.stringify(err),
 								icon: "none"
 							})
 						}
 					})
-					uniCloud.callFunction({
-						name: "login",
-						data: {
-							code
-						}
-					}).then(res => {
-						console.log(res);
-						if (res && res.result && res.result.data) {
-							const data = res.result.data;
-							uni.setStorage({
-								key: 'openid',
-								data: data.openid,
-								success() {
-									_this.initApp(data.openid);
-									uni.getUserInfo({
-										provider,
-										success(res1) {
-											uniCloud.database().collection('user').add({
-												openid: data.openid,
-												userInfo: res1.userInfo
-											})
-										}
-									})
-								}
-							});
-						}
-					}).catch(err => {
-						console.error(err)
-						uni.showToast({
-							title: "获取用户信息失败:" + JSON.stringify(err),
-							icon: "none"
-						})
-					});
 				} else {
 					uni.getStorage({
 						key: 'openid',

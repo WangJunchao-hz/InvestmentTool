@@ -20,7 +20,8 @@
 					</uni-grid-item>
 					<uni-grid-item>
 						<view class="grid-item-box">
-							<button :disabled="detailData.opType === 'buy'" plain style="border-color: #F56C6C; color: #F56C6C;" @click="opClick(1)">买
+							<button :disabled="detailData.opType === 'buy'" plain
+								style="border-color: #F56C6C; color: #F56C6C;" @click="opClick(1)">买
 								入</button>
 						</view>
 					</uni-grid-item>
@@ -38,7 +39,8 @@
 					</uni-grid-item>
 					<uni-grid-item>
 						<view class="grid-item-box">
-							<button :disabled="detailData.opType === 'sell'" plain style="border-color: #67C23A; color: #67C23A;" @click="opClick(0)">卖
+							<button :disabled="detailData.opType === 'sell'" plain
+								style="border-color: #67C23A; color: #67C23A;" @click="opClick(0)">卖
 								出</button>
 						</view>
 					</uni-grid-item>
@@ -82,13 +84,13 @@
 								<text
 									class="steps__text--item-text">{{item.opType === 'buy' ? item.buyAmount : item.sellAmount}}</text>
 								<text
-									class="steps__text--item-text">{{item.opType === 'buy' ? item.buyAmount : item.sellAmount}}</text>
+									class="steps__text--item-text primary">{{item.opType === 'buy' ? item.position : item.percentage+'%'}}</text>
 							</view>
-							<view class="steps__text--item" style="margin-top: 6px;">
+							<view class="steps__text--item" style="margin-top: 6px;font-size: 14px;">
 								<text style="width: 50%;" v-if="item.opType === 'buy'"
-									class="primary">{{item.amount}}</text>
+									class="primary">{{item.targetPercent}}%</text>
 								<text style="width: 50%;" v-else
-									:class="item.isProfit ? 'success' : 'danger'">{{item.percentage}}%</text>
+									:class="item.isProfit ? 'success' : 'danger'">{{item.profitAdnLoss}}</text>
 								<uni-dateformat class="info" style="width: 50%;" :date="item.updateDate" />
 							</view>
 						</view>
@@ -334,14 +336,14 @@
 			},
 			handleBuy(params, lastInfo) {
 				if (lastInfo && lastInfo._id) {
-					params.totalBuyAmount = this.$evaluate(lastInfo.totalBuyAmount + params.buyAmount);
+					params.totalBuyAmount = this.$NP.plus(lastInfo.totalBuyAmount, params.buyAmount);
 				} else {
 					params.totalBuyAmount = params.buyAmount;
 				}
 			},
 			handleSell(params, lastInfo) {
-				params.totalSellAmount = this.$evaluate(lastInfo.totalSellAmount + params.sellAmount);
-				params.totalProfitAdnLoss = this.$evaluate(params.totalSellAmount - lastInfo.totalBuyAmount);
+				params.totalSellAmount = this.$NP.plus(lastInfo.totalSellAmount, params.sellAmount);
+				params.totalProfitAdnLoss = this.$NP.minus(params.totalSellAmount, lastInfo.totalBuyAmount);
 				params.isTotalProfit = params.totalProfitAdnLoss < 0 ? false : true;
 				params.totalPercentage = Number((this.$evaluate(params.totalProfitAdnLoss / lastInfo.totalBuyAmount * 100))
 					.toFixed(2));

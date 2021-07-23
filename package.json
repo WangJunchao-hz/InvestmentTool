@@ -18,6 +18,6 @@
   },
   "homepage": "https://github.com/wanglujiu/InvestmentTool#readme",
   "dependencies": {
-    "mathjs": "^9.4.4"
+    "number-precision": "^1.5.0"
   }
 }
