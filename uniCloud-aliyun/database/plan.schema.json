@@ -31,10 +31,23 @@
 			"bsonType": "string",
 			"label": "备注"
 		},
-		"planDetails": {
-			"bsonType": "array",
-			"arrayType": "object",
-			"description": "计划详情"
+		"totalPercentage": {
+			"bsonType": "double",
+			"description": "总共金额盈亏百分比"
+		},
+		"isTotalProfit": {
+			"bsonType": "bool",
+			"description": "总体是否盈利",
+			"defaultValue": true
+		},
+		"preAdvise": {
+			"bsonType": "double",
+			"description": "操作建议"
+		},
+		"opType": {
+			"bsonType": "string",
+			"defaultValue": "buy",
+			"description": "操作类型"
 		},
 		"createDate": {
 			"bsonType": "timestamp",

@@ -53,7 +53,8 @@
 					<uni-grid-item>
 						<view class="grid-item-box" :class="detailData.isOnceProfit ? 'success' : 'danger'">
 							<text class="text">累计盈亏</text>
-							<text class="text">{{detailData.oncePercentage}}%({{detailData.targetPercent}}%)</text>
+							<text class="text">{{detailData.oncePercentage}}%<text
+									class="primary">({{detailData.preAdvise}})</text></text>
 						</view>
 					</uni-grid-item>
 					<uni-grid-item>
@@ -145,7 +146,8 @@
 		validator
 	} from '../../js_sdk/validator/planDetails.js';
 	const db = uniCloud.database();
-	const dbCmd = db.command
+	const dbCmd = db.command;
+	const plan = 'plan';
 	const planDetailsDB = 'planDetails';
 	const recordsDB = 'detailRecords';
 
@@ -211,7 +213,12 @@
 				})
 			},
 			addRecord(params) {
-				db.collection(recordsDB).add(params)
+				db.collection(recordsDB).add(params);
+			},
+			updatePlan(params) {
+				db.collection(plan).where({
+					_id: dbCmd.eq(this.planId)
+				}).update(params);
 			},
 			opClick(type) {
 				this.opType = type;
@@ -297,9 +304,10 @@
 					onceProfitAdnLoss: 0,
 					totalProfitAdnLoss: 0,
 					percentage: 0,
+					cachePercentage: 0,
 					oncePercentage: 0,
 					totalPercentage: 0,
-					preAdvise: '',
+					preAdvise: 1,
 					isComplete: false,
 					createDate: time
 				};
@@ -330,7 +338,13 @@
 				if (params && params._id) {
 					delete params._id
 				}
-				this.addRecord(params)
+				this.addRecord(params);
+				this.updatePlan({
+					isTotalProfit: params.isTotalProfit,
+					preAdvise: params.preAdvise,
+					totalPercentage: params.totalPercentage,
+					opType: params.opType
+				});
 				console.log(params);
 				return params;
 			},
@@ -345,21 +359,26 @@
 				params.totalSellAmount = this.$NP.plus(lastInfo.totalSellAmount, params.sellAmount);
 				params.totalProfitAdnLoss = this.$NP.minus(params.totalSellAmount, lastInfo.totalBuyAmount);
 				params.isTotalProfit = params.totalProfitAdnLoss < 0 ? false : true;
-				params.totalPercentage = Number((this.$evaluate(params.totalProfitAdnLoss / lastInfo.totalBuyAmount * 100))
-					.toFixed(2));
-				params.profitAdnLoss = this.$evaluate(params.sellAmount - lastInfo.buyAmount);
+				params.totalPercentage = this.$NP.round(this.$NP.divide(params.totalProfitAdnLoss, lastInfo
+					.totalBuyAmount), 2) * 100;
+				params.profitAdnLoss = this.$NP.minus(params.sellAmount, lastInfo.buyAmount);
 				params.isProfit = params.profitAdnLoss < 0 ? false : true;
-				params.percentage = Number((this.$evaluate(params.profitAdnLoss / lastInfo.buyAmount * 100)).toFixed(2));
+				params.percentage = this.$NP.round(this.$NP.divide(params.profitAdnLoss, lastInfo
+					.buyAmount), 2) * 100;
 				if (lastInfo.onceProfitAdnLoss > 0) {
 					params.onceProfitAdnLoss = params.profitAdnLoss;
 					params.oncePercentage = params.percentage;
 				} else {
-					params.onceProfitAdnLoss = this.$evaluate(lastInfo.onceProfitAdnLoss + params.profitAdnLoss);
-					params.oncePercentage = this.$evaluate(lastInfo.oncePercentage + params.percentage);
+					params.onceProfitAdnLoss = this.$NP.plus(lastInfo.onceProfitAdnLoss, params.profitAdnLoss);
+					params.oncePercentage = this.$NP.plus(lastInfo.oncePercentage, params.percentage);
 					params.isComplete = params.onceProfitAdnLoss > 0 ? true : false;
 				}
-				const position = Math.abs(Math.floor(this.$evaluate(params.oncePercentage / lastInfo.targetPercent)))
-				params.preAdvise = `下次买入建议加仓${position}`
+				params.isOnceProfit = params.onceProfitAdnLoss < 0 ? false : true;
+				params.cachePercentage = this.$NP.plus(lastInfo.cachePercentage, params.percentage);
+				if (params.cachePercentage <= -lastInfo.targetPercent) {
+					params.preAdvise = lastInfo.position + 1;
+					params.cachePercentage = 0;
+				}
 			},
 			resetForm() {
 				this.formData.buyAmount = '';

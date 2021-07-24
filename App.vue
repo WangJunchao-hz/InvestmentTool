@@ -228,4 +228,31 @@
 	.normal {
 		color: #303133;
 	}
+
+	.list-item {
+		&__header {}
+
+		&__body {
+			flex: 1;
+
+			&-title {
+				padding-right: 18px;
+				display: flex;
+				justify-content: space-between;
+				font-size: 14px;
+				color: #303133;
+			}
+
+			&-text {
+				font-size: 12px;
+				color: #909399;
+			}
+		}
+
+		&__footer {
+			display: flex;
+			align-items: center;
+			font-size: 14px;
+		}
+	}
 </style>

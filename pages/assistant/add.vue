@@ -97,7 +97,10 @@
 					userId: this.userId,
 					...this.formData,
 					planType: this.planType,
-					planDetails: [],
+					isTotalProfit: true,
+					preAdvise: 1,
+					totalPercentage: 0,
+					opType:'',
 					createDate: time,
 					updateDate: time
 				}

@@ -5,9 +5,27 @@
 				<view class="group__title">{{list.name}}</view>
 			</template>
 			<uni-list>
-				<uni-list-item v-for="subList in list.children" :key="subList._id" :title="subList.planName"
-					:note="subList.remarks" :rightText="subList.updateDate" link
-					:to="'/pages/assistant/detail?id='+subList._id"></uni-list-item>
+				<uni-list-item class="list-item" v-for="subList in list.children" :key="subList._id" link
+					:to="'/pages/assistant/detail?id='+subList._id">
+					<template #body>
+						<view class="list-item__body">
+							<view class="list-item__body-title">
+								<text>{{subList.planName}}</text>
+							</view>
+							<view class="list-item__body-text">
+								{{subList.remarks}}
+							</view>
+						</view>
+					</template>
+					<template #footer>
+						<view class="list-item__footer primary">
+							<text
+								:class="subList.isTotalProfit? 'success' : 'danger'">{{subList.totalPercentage}}%</text>
+							<text v-if="subList.opType === 'sell'" style="margin-left: 18px;">
+								建议仓位: {{subList.preAdvise}}</text>
+						</view>
+					</template>
+				</uni-list-item>
 			</uni-list>
 		</uni-group>
 		<uni-fab :horizontal="'right'" :popMenu="false" @fabClick="fabClick"></uni-fab>

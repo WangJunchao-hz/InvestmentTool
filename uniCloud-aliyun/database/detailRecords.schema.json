@@ -61,6 +61,10 @@
 			"bsonType": "double",
 			"description": "本次金额盈亏百分比"
 		},
+		"cachePercentage": {
+			"bsonType": "double",
+			"description": "盈亏比累计缓存"
+		},
 		"oncePercentage": {
 			"bsonType": "double",
 			"description": "一个交易过程中金额盈亏百分比"
@@ -101,7 +105,7 @@
 			"defaultValue": 10
 		},
 		"preAdvise": {
-			"bsonType": "string",
+			"bsonType": "double",
 			"description": "操作建议"
 		},
 		"isComplete": {
