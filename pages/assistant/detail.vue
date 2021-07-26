@@ -343,7 +343,8 @@
 					isTotalProfit: params.isTotalProfit,
 					preAdvise: params.preAdvise,
 					totalPercentage: params.totalPercentage,
-					opType: params.opType
+					opType: params.opType,
+					updateDate: params.updateDate
 				});
 				console.log(params);
 				return params;
