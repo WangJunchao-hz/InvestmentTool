@@ -132,8 +132,8 @@
 						<uni-number-box v-model="formData.targetPercent" min="0" max="100" />
 					</uni-forms-item>
 					<view style="text-align: center;">
-						<button size="mini" style="width: 40%;margin-right: 10px;" @click="cancle">取消</button>
-						<button size="mini" style="width: 40%;" type="primary" @click="submit">提交</button>
+						<button class="form-button" style="width: 40%;margin-right: 10px;display: inline-block;" @click="cancle">取消</button>
+						<button class="form-button" style="width: 40%;" type="primary" @click="submit">提交</button>
 					</view>
 				</uni-forms>
 			</view>
@@ -361,11 +361,11 @@
 				params.totalProfitAdnLoss = this.$NP.minus(params.totalSellAmount, lastInfo.totalBuyAmount);
 				params.isTotalProfit = params.totalProfitAdnLoss < 0 ? false : true;
 				params.totalPercentage = this.$NP.round(this.$NP.divide(params.totalProfitAdnLoss, lastInfo
-					.totalBuyAmount), 2) * 100;
+					.totalBuyAmount) * 100, 2);
 				params.profitAdnLoss = this.$NP.minus(params.sellAmount, lastInfo.buyAmount);
 				params.isProfit = params.profitAdnLoss < 0 ? false : true;
 				params.percentage = this.$NP.round(this.$NP.divide(params.profitAdnLoss, lastInfo
-					.buyAmount), 2) * 100;
+					.buyAmount) * 100, 2);
 				if (lastInfo.onceProfitAdnLoss > 0) {
 					params.onceProfitAdnLoss = params.profitAdnLoss;
 					params.oncePercentage = params.percentage;
@@ -482,5 +482,10 @@
 				}
 			}
 		}
+	}
+	.form-button{
+		width: 40%;
+		display: inline-block;
+		line-height: 2;
 	}
 </style>

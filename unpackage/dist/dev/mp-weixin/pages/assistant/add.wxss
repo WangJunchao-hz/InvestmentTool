@@ -26,6 +26,7 @@
 /* 文章场景相关 */
 .uni-container.data-v-60dc6372 {
   padding: 15px;
+  background-color: #fff;
 }
 .uni-input-border.data-v-60dc6372,
 .uni-textarea-border.data-v-60dc6372 {

@@ -36,7 +36,43 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+page {
+  background-color: #eaedf2;
+}
+.asset-total {
+  color: #FFFFFF;
+  background-color: #409EFF;
+}
+.asset-total text {
+  display: block;
+  text-align: center;
+}
+.asset-total .part1 {
+  padding: 8px 0;
+}
+.asset-total .part1 .amount {
+  font-size: 28px;
+}
+.asset-total .part2 {
+  padding: 8px 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+  background-color: #53a8ff;
+}
+.asset-total .part2 view {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+}
+.asset-total .part2 view .amount {
+  font-size: 18px;
+}
 .group__title {
+  padding-top: 10px;
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;

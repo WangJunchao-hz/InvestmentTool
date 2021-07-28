@@ -1,0 +1,49 @@
+// 文档教程: https://uniapp.dcloud.net.cn/uniCloud/schema
+{
+	"bsonType": "object",
+	"required": [],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"accountId": {
+			"bsonType": "string",
+			"description": "账户id"
+		},
+		"amount": {
+			"bsonType": "double",
+			"minimum": 0,
+			"label": "账户余额",
+			"description": "请输入账户余额"
+		},
+		"lastAmount": {
+			"bsonType": "double",
+			"minimum": 0,
+			"label": "上一次账户余额"
+		},
+		"percentage": {
+			"bsonType": "double",
+			"description": "余额波动幅度"
+		},
+		"isProfit": {
+			"bsonType": "bool",
+			"description": "余额是否增长",
+			"defaultValue": true
+		},
+		"createDate": {
+			"bsonType": "timestamp",
+			"description": "创建时间"
+		},
+		"updateDate": {
+			"bsonType": "timestamp",
+			"description": "更新时间"
+		}
+	}
+
+}

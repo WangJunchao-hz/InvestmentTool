@@ -5,14 +5,16 @@
     "pages/assistant/add",
     "pages/assistant/detail",
     "pages/assets/index",
+    "pages/assets/add",
+    "pages/assets/detail",
     "pages/tools/index"
   ],
   "subPackages": [],
   "window": {
-    "navigationBarTextStyle": "black",
+    "navigationBarTextStyle": "white",
     "navigationBarTitleText": "鱼川",
-    "navigationBarBackgroundColor": "#F8F8F8",
-    "backgroundColor": "#F8F8F8"
+    "navigationBarBackgroundColor": "#409EFF",
+    "backgroundColor": "#409EFF"
   },
   "tabBar": {
     "color": "#000000",
@@ -50,6 +52,5 @@
       }
     ]
   },
-  "usingComponents": {},
-  "sitemapLocation": "sitemap.json"
+  "usingComponents": {}
 }

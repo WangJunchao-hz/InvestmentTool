@@ -25,6 +25,16 @@
 			"navigationBarTitleText": "资产"
 		}
 	}, {
+		"path": "pages/assets/add",
+		"style": {
+			"navigationBarTitleText": "新增账户"
+		}
+	}, {
+		"path": "pages/assets/detail",
+		"style": {
+			"navigationBarTitleText": "账户详情"
+		}
+	}, {
 		"path": "pages/tools/index",
 		"style": {
 			"navigationBarTitleText": "工具"
@@ -62,12 +72,12 @@
 		}]
 	},
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
+		"navigationBarTextStyle": "#fff",
 		"navigationBarTitleText": "鱼川",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8",
+		"navigationBarBackgroundColor": "#409EFF",
+		"backgroundColor": "#409EFF",
 		"app-plus": {
-			"background": "#efeff4"
+			"background": "#409EFF"
 		}
 	}
 }

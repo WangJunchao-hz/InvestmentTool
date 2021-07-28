@@ -2,12 +2,15 @@
 	<view class="uni-container">
 		<uni-forms ref="form" :value="formData" validate-trigger="submit" err-show-type="toast" labelAlign="right"
 			labelWidth="80">
-			<uni-forms-item name="planName" label="计划名称" required>
-				<uni-easyinput placeholder="请输入" v-model="formData.planName" trim="both"></uni-easyinput>
+			<uni-forms-item name="name" label="账户名称" required>
+				<uni-easyinput placeholder="请输入" v-model="formData.name" trim="both"></uni-easyinput>
 			</uni-forms-item>
-			<uni-forms-item label="计划类型" required>
+			<uni-forms-item name="amount" label="账户余额" required>
+				<uni-easyinput placeholder="请输入" v-model="formData.amount" type="digit"></uni-easyinput>
+			</uni-forms-item>
+			<uni-forms-item label="账户类型" required>
 				<picker mode="selector" :range="accountTypes" range-key="name" @change="accountTypeChange">
-					<view class="picker-value">{{planType.name}}</view>
+					<view class="picker-value">{{type.name}}</view>
 				</picker>
 			</uni-forms-item>
 			<uni-forms-item name="remarks" label="备注">
@@ -23,10 +26,10 @@
 <script>
 	import {
 		validator
-	} from '../../js_sdk/validator/plan.js';
+	} from '../../js_sdk/validator/account.js';
 
 	const db = uniCloud.database();
-	const planDB = 'plan';
+	const accountDB = 'account';
 	const typesDB = 'types'
 
 	function getValidator(fields) {
@@ -38,17 +41,17 @@
 		}
 		return result
 	}
-
 	export default {
 		data() {
 			const formData = {
-				planName: '',
+				name: '',
+				amount: '',
 				remarks: ''
 			}
 			return {
 				userId: '',
 				formData,
-				planType: {
+				type: {
 					name: ''
 				},
 				accountTypes: [],
@@ -66,20 +69,17 @@
 			getAccountTypes() {
 				db.collection(typesDB).where('classify == "accountType"').get().then(res => {
 					this.accountTypes = res.result.data
-					this.planType = this.accountTypes[0]
+					this.type = this.accountTypes[0]
 				}).catch(() => {
 					uni.showToast({
-						title: "类型获取失败",
+						title: "账户类型获取失败",
 						icon: "none"
 					})
 				})
 			},
 			accountTypeChange(event) {
-				this.planType = this.accountTypes[Number(event.detail.value)]
+				this.type = this.accountTypes[Number(event.detail.value)]
 			},
-			/**
-			 * 触发表单提交
-			 */
 			submit() {
 				uni.showLoading({
 					mask: true
@@ -90,23 +90,23 @@
 					uni.hideLoading()
 				})
 			},
-
 			submitForm() {
 				const time = new Date().getTime();
 				const params = {
 					userId: this.userId,
-					...this.formData,
-					planType: this.planType,
-					isTotalProfit: true,
-					preAdvise: 1,
-					totalPercentage: 0,
-					opType: '',
+					name: this.formData.name,
+					amount: Number(this.formData.amount),
+					remarks: this.formData.remarks,
+					lastAmount: 0,
+					percentage: 0,
+					isProfit: true,
+					type: this.type,
 					createDate: time,
 					updateDate: time
 				}
 				console.log(params);
 				// 使用 clientDB 提交数据
-				db.collection(planDB).add(params).then((res) => {
+				db.collection(accountDB).add(params).then((res) => {
 					uni.showToast({
 						icon: 'none',
 						title: '新增成功'
@@ -114,7 +114,7 @@
 					this.getOpenerEventChannel().emit('refreshData')
 					setTimeout(() =>
 						uni.switchTab({
-							url: "/pages/assistant/index"
+							url: "/pages/assets/index"
 						}), 500)
 				}).catch((err) => {
 					uni.showModal({
@@ -125,7 +125,7 @@
 					uni.hideLoading()
 				})
 			}
-		}
+		},
 	}
 </script>
 

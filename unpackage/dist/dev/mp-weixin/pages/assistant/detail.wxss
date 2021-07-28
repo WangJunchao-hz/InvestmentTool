@@ -137,4 +137,9 @@
 .steps__line-item--after.active.data-v-7ae00c1b {
   background-color: #67C23A;
 }
+.form-button.data-v-7ae00c1b {
+  width: 40%;
+  display: inline-block;
+  line-height: 2;
+}
 

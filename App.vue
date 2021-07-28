@@ -1,7 +1,4 @@
 <script>
-	import {
-		EventBus
-	} from './tools/event-bus.js'
 	export default {
 		globalData: {
 			userId: ''
@@ -149,7 +146,6 @@
 			},
 			initApp(openid) {
 				getApp().globalData.userId = openid
-				EventBus.$emit('AppReady', openid)
 			}
 		}
 	}
@@ -172,8 +168,46 @@
 		-moz-osx-font-smoothing: grayscale;
 	}
 
+	page {
+		background-color: #eaedf2;
+	}
+
+	.asset-total {
+		color: #FFFFFF;
+		background-color: #409EFF;
+
+		text {
+			display: block;
+			text-align: center;
+		}
+
+		.part1 {
+			padding: 8px 0;
+
+			.amount {
+				font-size: 28px;
+			}
+		}
+
+		.part2 {
+			padding: 8px 0;
+			display: flex;
+			justify-content: space-between;
+			background-color: #53a8ff;
+
+			view {
+				flex: 1;
+
+				.amount {
+					font-size: 18px;
+				}
+			}
+		}
+	}
+
 	.group {
 		&__title {
+			padding-top: 10px;
 			display: flex;
 			align-items: center;
 			padding-left: 15px;

@@ -2,7 +2,7 @@
 	<view>
 		<uni-group class="group" v-for="list in planLists" :key="list.id">
 			<template #title>
-				<view class="group__title">{{list.name}}</view>
+				<view class="group__title">{{list.name}} ({{list.children.length}})</view>
 			</template>
 			<uni-list>
 				<uni-list-item class="list-item" v-for="subList in list.children" :key="subList._id" link
@@ -33,7 +33,6 @@
 </template>
 
 <script>
-	import DateFormat from '../../js_sdk/xfl-DateFormat/DateFormat.js'
 	const db = uniCloud.database();
 	const dbCmd = db.command
 	const planDB = 'plan';
@@ -59,8 +58,6 @@
 						this.planLists = [];
 						const typeTolist = new Map();
 						res.result.data.forEach(item => {
-							item.updateDate = new DateFormat(item.updateDate).toString(
-								'yyyy-mm-dd hh:ff:ss')
 							const hasExt = typeTolist.get(item.planType.field)
 							if (hasExt) {
 								hasExt.children.push(item)
