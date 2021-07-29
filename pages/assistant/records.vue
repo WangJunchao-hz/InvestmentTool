@@ -88,7 +88,10 @@
 								uni.showToast({
 									title: '删除成功'
 								})
-								_this.getRecordLists()
+								_this.handleData();
+								setTimeout(() => {
+									_this.getRecordLists();
+								}, 500)
 							}).catch(err => {
 								uni.showModal({
 									content: err.message || '删除失败',
@@ -104,7 +107,7 @@
 			handleData() {
 				const delItem = this.recordLists[0];
 				const time = new Date().getTime();
-				const params = {
+				let params = {
 					opType: '',
 					buyAmount: 0,
 					onceBuyAmount: 0,
@@ -113,18 +116,23 @@
 				};
 				if (this.recordLists.length > 1) {
 					const last = this.recordLists[1];
-					switch (delItem.opType) {
-						case 'buy':
-							params.opType = last.opType;
-							params.buyAmount = last.buyAmount;
-							params.onceBuyAmount = last.onceBuyAmount;
-							params.totalBuyAmount = last.totalBuyAmount;
-							break;
-						case 'sell':
-							params.opType = 'buy';
-							break;
+					params = {
+						...last,
+						updateDate: time
 					}
 				}
+				db.collection(planDetailsDB).where({
+					planId: this.planId
+				}).update(params);
+				db.collection(plan).where({
+					_id: this.planId
+				}).update({
+					isTotalProfit: params.isTotalProfit || 0,
+					preAdvise: params.preAdvise || 1,
+					totalPercentage: params.totalPercentage || 0,
+					opType: params.opType,
+					updateDate: params.updateDate
+				});
 			}
 		},
 	}

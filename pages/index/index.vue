@@ -49,6 +49,11 @@
 				</uni-list-item>
 			</uni-list>
 		</uni-group>
+		<no-data v-if="!planLists.length">
+			<template #text>
+				优秀的猎人总是在等待时机，一击必中！
+			</template>
+		</no-data>
 		<no-data v-if="nodata"></no-data>
 		<uni-fab :pattern="pattern" :horizontal="'right'" :content="fastNav" @trigger="fabTrigger"></uni-fab>
 	</view>

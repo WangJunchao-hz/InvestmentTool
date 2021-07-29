@@ -1,7 +1,9 @@
 <template>
 	<view class="no-data">
 		<text class="iconfont">&#xe600;</text>
-		<view>暂无数据</view>
+		<slot name="text">
+			<view>暂无数据</view>
+		</slot>
 		<slot></slot>
 	</view>
 </template>
@@ -20,10 +22,10 @@
 <style lang="scss" scoped>
 	.no-data {
 		padding: 16px;
-		width: 100%;
 		text-align: center;
 		color: #909399;
 		font-size: 18px;
+		background-color: #fff;
 
 		.iconfont {
 			font-size: 88px;
