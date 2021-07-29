@@ -43,9 +43,9 @@
 								},
 								fail(err) {
 									console.error("登录失败", err);
-									uni.showToast({
-										title: "登录失败",
-										icon: "none"
+									uni.showModal({
+										content: err || '登录失败',
+										showCancel: false
 									})
 								}
 							});
@@ -112,9 +112,9 @@
 						},
 						fail(err) {
 							console.error(err);
-							uni.showToast({
-								title: "获取用户信息失败:" + JSON.stringify(err),
-								icon: "none"
+							uni.showModal({
+								content: err || '获取用户信息失败',
+								showCancel: false
 							})
 						}
 					})
@@ -134,9 +134,9 @@
 								},
 								fail(err) {
 									console.error("登录失败", err);
-									uni.showToast({
-										title: "登录失败",
-										icon: "none"
+									uni.showModal({
+										content: err || '登录失败',
+										showCancel: false
 									})
 								}
 							});
@@ -278,6 +278,7 @@
 			}
 
 			&-text {
+				margin-top: 6px;
 				font-size: 12px;
 				color: #909399;
 			}
@@ -287,6 +288,103 @@
 			display: flex;
 			align-items: center;
 			font-size: 14px;
+		}
+	}
+
+	.steps {
+		display: flex;
+		flex-direction: row-reverse;
+		background-color: #fff;
+
+		&__text-container {
+			display: flex;
+			flex-direction: column;
+			flex: 1;
+		}
+
+		&__container {
+			display: inline-flex;
+			width: 30px;
+			flex-direction: column;
+		}
+
+		&__text {
+			padding: 6px 15px 6px 0;
+			border-bottom-style: solid;
+			border-bottom-width: 1px;
+			border-bottom-color: #e5e5e5;
+			display: flex;
+			flex-direction: column;
+
+			&.active {
+				color: #67C23A;
+			}
+
+			&--item {
+				display: flex;
+
+				&-text {
+					width: 42%;
+					flex-shrink: 0;
+					&:first-child{
+						width: 16%;
+					}
+				}
+			}
+		}
+
+		&__line-item {
+			display: flex;
+			flex-direction: column;
+			flex: 1;
+			align-items: center;
+			justify-content: center;
+
+			&:first-child {
+				.steps__line-item--before {
+					background-color: transparent;
+				}
+			}
+
+			&--before {
+				width: 1px;
+				height: 6px;
+				background-color: #999;
+				transform: translate(0px, -1px);
+
+				&.active {
+					background-color: #67C23A;
+				}
+			}
+
+			&--circle {
+				width: 5px;
+				height: 5px;
+				border-radius: 100px;
+				background-color: #999;
+				margin: 4px 0px 5px 0px;
+
+				&.active {
+					background-color: #67C23A;
+				}
+			}
+
+			&--check {
+				height: 14px;
+				line-height: 14px;
+				margin: 2px 0px;
+			}
+
+			&--after {
+				width: 1px;
+				background-color: #999;
+				flex: 1;
+				transform: translate(0px, 1px);
+
+				&.active {
+					background-color: #67C23A;
+				}
+			}
 		}
 	}
 </style>

@@ -33,6 +33,12 @@
 			"minimum": 0,
 			"description": "买入总额"
 		},
+		"onceBuyAmount": {
+			"bsonType": "double",
+			"label": "一次交易累计买入总额",
+			"minimum": 0,
+			"description": "一次交易累计买入总额"
+		},
 		"sellAmount": {
 			"bsonType": "double",
 			"label": "卖出金额",
@@ -44,6 +50,12 @@
 			"label": "卖出总额",
 			"minimum": 0,
 			"description": "卖出总额"
+		},
+		"onceSellAmount": {
+			"bsonType": "double",
+			"label": "一次交易累计卖出总额",
+			"minimum": 0,
+			"description": "一次交易累计卖出总额"
 		},
 		"profitAdnLoss": {
 			"bsonType": "double",

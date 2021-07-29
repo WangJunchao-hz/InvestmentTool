@@ -1,5 +1,55 @@
 <template>
 	<view>
+		<uni-group class="group">
+			<template #title>
+				<view class="group__title">
+					<view style="width: 100%;display: flex;justify-content: space-between;padding-right: 15px;">
+						<view>
+							{{planInfo.planName}} ({{planInfo.planType.name}})
+							<uni-icons type="compose" size="18px" style="margin-left: 8px;"
+								@click="navJump('/pages/assistant/add')"></uni-icons>
+						</view>
+						<uni-icons type="trash" size="18px" @click="deletePlan"></uni-icons>
+					</view>
+				</view>
+			</template>
+			<uni-list>
+				<uni-list-item class="list-item">
+					<template #body>
+						<view class="list-item__body">
+							<view class="list-item__body-title" :class="planInfo.isTotalProfit ? 'success' : 'danger'">
+								盈亏总额：{{detailData.totalProfitAdnLoss || 0}}
+							</view>
+						</view>
+					</template>
+					<template #footer>
+						<view class="list-item__footer primary">
+							<text :class="detailData.cachePercentage < 0 ? 'danger':'success'"
+								style="margin-left: 18px;">
+								亏损阙值: {{detailData.cachePercentage || 0}}%</text>
+						</view>
+					</template>
+				</uni-list-item>
+				<uni-list-item class="list-item">
+					<template #body>
+						<view class="list-item__body">
+							<view class="list-item__body-title" :class="planInfo.isOnceProfit ? 'success' : 'danger'">
+								累计盈亏总额：{{detailData.onceProfitAdnLoss || 0}}
+							</view>
+							<view class="list-item__body-text">
+								{{planInfo.remarks}}
+							</view>
+						</view>
+					</template>
+					<template #footer>
+						<view class="list-item__footer">
+							<uni-dateformat class="list-item__body-text" :date="planInfo.updateDate">
+							</uni-dateformat>
+						</view>
+					</template>
+				</uni-list-item>
+			</uni-list>
+		</uni-group>
 		<template v-if="detailData">
 			<uni-group class="group">
 				<template #title>
@@ -47,14 +97,16 @@
 					<uni-grid-item>
 						<view class="grid-item-box" :class="detailData.isProfit ? 'success' : 'danger'">
 							<text class="text">盈亏</text>
-							<text class="text">{{detailData.percentage}}%</text>
+							<text class="text">
+								{{detailData.percentage}}%
+								<text class="primary">({{detailData.preAdvise}})</text>
+							</text>
 						</view>
 					</uni-grid-item>
 					<uni-grid-item>
 						<view class="grid-item-box" :class="detailData.isOnceProfit ? 'success' : 'danger'">
 							<text class="text">累计盈亏</text>
-							<text class="text">{{detailData.oncePercentage}}%<text
-									class="primary">({{detailData.preAdvise}})</text></text>
+							<text class="text">{{detailData.oncePercentage}}%</text>
 						</view>
 					</uni-grid-item>
 					<uni-grid-item>
@@ -70,7 +122,8 @@
 					<view class="group__title">
 						<view style="width: 100%;display: flex;justify-content: space-between;padding-right: 15px;">
 							<text>操作记录</text>
-							<text class="primary" style="font-size: 14px;">查看全部</text>
+							<text class="primary" style="font-size: 14px;"
+								@click="navJump('/pages/assistant/records')">查看全部</text>
 						</view>
 					</view>
 				</template>
@@ -83,15 +136,16 @@
 									{{item.opType === 'buy' ? '买入' : '卖出'}}
 								</text>
 								<text
-									class="steps__text--item-text">{{item.opType === 'buy' ? item.buyAmount : item.sellAmount}}</text>
+									class="steps__text--item-text">金额：{{item.opType === 'buy' ? item.buyAmount : item.sellAmount}}</text>
 								<text
-									class="steps__text--item-text primary">{{item.opType === 'buy' ? item.position : item.percentage+'%'}}</text>
+									class="steps__text--item-text primary">{{item.opType === 'buy' ? '仓位：'+item.position : '盈亏：'+item.percentage+'%'}}</text>
 							</view>
 							<view class="steps__text--item" style="margin-top: 6px;font-size: 14px;">
-								<text style="width: 50%;" v-if="item.opType === 'buy'"
-									class="primary">{{item.targetPercent}}%</text>
+								<text style="width: 50%;" v-if="item.opType === 'buy'" class="primary">
+									亏损 {{item.targetPercent}}% 加仓
+								</text>
 								<text style="width: 50%;" v-else
-									:class="item.isProfit ? 'success' : 'danger'">{{item.profitAdnLoss}}</text>
+									:class="item.isProfit ? 'success' : 'danger'">盈亏额：{{item.profitAdnLoss}}</text>
 								<uni-dateformat class="info" style="width: 50%;" :date="item.updateDate" />
 							</view>
 						</view>
@@ -132,7 +186,8 @@
 						<uni-number-box v-model="formData.targetPercent" min="0" max="100" />
 					</uni-forms-item>
 					<view style="text-align: center;">
-						<button class="form-button" style="width: 40%;margin-right: 10px;display: inline-block;" @click="cancle">取消</button>
+						<button class="form-button" style="width: 40%;margin-right: 10px;display: inline-block;"
+							@click="cancle">取消</button>
 						<button class="form-button" style="width: 40%;" type="primary" @click="submit">提交</button>
 					</view>
 				</uni-forms>
@@ -174,6 +229,13 @@
 				formData,
 				detailData: '',
 				recordLists: [],
+				planInfo: {
+					planName: '',
+					planType: {
+						name: ''
+					},
+					remarks: ''
+				},
 				rules: {
 					...getValidator(Object.keys(formData))
 				},
@@ -184,12 +246,23 @@
 			this.planId = op.id;
 		},
 		onShow() {
-			this.getPlanDetails()
+			this.getPlan();
+			this.getPlanDetails();
 		},
 		onReady() {
 			this.$refs.form.setRules(this.rules)
 		},
 		methods: {
+			getPlan() {
+				db.collection(plan).where({
+					_id: this.planId
+				}).get().then(res => {
+					if (res.result.data.length) {
+						this.planInfo = res.result.data[0];
+						// console.log(this.planInfo);
+					}
+				})
+			},
 			getPlanDetails() {
 				db.collection(planDetailsDB).where({
 					planId: dbCmd.eq(this.planId)
@@ -206,7 +279,7 @@
 			getRecordLists() {
 				db.collection(recordsDB).where({
 					planId: dbCmd.eq(this.planId)
-				}).limit(9).orderBy('updateDate desc').get().then(res => {
+				}).orderBy('updateDate desc').limit(9).get().then(res => {
 					if (res.result.data.length) {
 						this.recordLists = res.result.data;
 					}
@@ -297,6 +370,8 @@
 					targetPercent: this.formData.targetPercent,
 					totalBuyAmount: 0,
 					totalSellAmount: 0,
+					onceBuyAmount: 0,
+					onceSellAmount: 0,
 					isProfit: true,
 					isOnceProfit: true,
 					isTotalProfit: true,
@@ -352,32 +427,54 @@
 			handleBuy(params, lastInfo) {
 				if (lastInfo && lastInfo._id) {
 					params.totalBuyAmount = this.$NP.plus(lastInfo.totalBuyAmount, params.buyAmount);
+					if (params.isComplete) {
+						params.onceBuyAmount = params.buyAmount;
+					} else {
+						params.onceBuyAmount = this.$NP.plus(lastInfo.onceBuyAmount, params.buyAmount);
+					}
+
+					// 如果仓位改变了，缓存收益重置
+					if (params.position !== lastInfo.position) {
+						params.cachePercentage = 0;
+					}
+					params.preAdvise = params.position;
 				} else {
 					params.totalBuyAmount = params.buyAmount;
+					params.onceBuyAmount = params.buyAmount;
 				}
 			},
 			handleSell(params, lastInfo) {
+				// total计算
 				params.totalSellAmount = this.$NP.plus(lastInfo.totalSellAmount, params.sellAmount);
 				params.totalProfitAdnLoss = this.$NP.minus(params.totalSellAmount, lastInfo.totalBuyAmount);
 				params.isTotalProfit = params.totalProfitAdnLoss < 0 ? false : true;
 				params.totalPercentage = this.$NP.round(this.$NP.divide(params.totalProfitAdnLoss, lastInfo
 					.totalBuyAmount) * 100, 2);
+
+				// 单次计算
 				params.profitAdnLoss = this.$NP.minus(params.sellAmount, lastInfo.buyAmount);
 				params.isProfit = params.profitAdnLoss < 0 ? false : true;
 				params.percentage = this.$NP.round(this.$NP.divide(params.profitAdnLoss, lastInfo
 					.buyAmount) * 100, 2);
-				if (lastInfo.onceProfitAdnLoss > 0) {
-					params.onceProfitAdnLoss = params.profitAdnLoss;
-					params.oncePercentage = params.percentage;
+
+				// 累计计算
+				if (params.isComplete) {
+					params.onceSellAmount = params.sellAmount;
 				} else {
-					params.onceProfitAdnLoss = this.$NP.plus(lastInfo.onceProfitAdnLoss, params.profitAdnLoss);
-					params.oncePercentage = this.$NP.plus(lastInfo.oncePercentage, params.percentage);
-					params.isComplete = params.onceProfitAdnLoss > 0 ? true : false;
+					params.onceSellAmount = this.$NP.plus(lastInfo.onceSellAmount, params.sellAmount);
 				}
+				params.onceProfitAdnLoss = this.$NP.minus(params.onceSellAmount, lastInfo.onceBuyAmount);
 				params.isOnceProfit = params.onceProfitAdnLoss < 0 ? false : true;
+				params.oncePercentage = this.$NP.round(this.$NP.divide(params.onceProfitAdnLoss, lastInfo
+					.onceBuyAmount) * 100, 2);
+				params.isComplete = params.onceProfitAdnLoss >= 0 ? true : false;
+
+				// 仓位预测
 				params.cachePercentage = this.$NP.plus(lastInfo.cachePercentage, params.percentage);
 				if (params.cachePercentage <= -lastInfo.targetPercent) {
 					params.preAdvise = lastInfo.position + 1;
+					params.cachePercentage = 0;
+				} else if (params.cachePercentage >= 0) {
 					params.cachePercentage = 0;
 				}
 			},
@@ -386,104 +483,90 @@
 				this.formData.sellAmount = '';
 				this.formData.targetPercent = 10;
 				this.formData.position = 1;
+			},
+			navJump(path) {
+				uni.navigateTo({
+					url: path + '?id=' + this.planId,
+				})
+			},
+			deletePlan() {
+				const _this = this;
+				uni.showModal({
+					title: '警告',
+					content: '确定删除吗？',
+					success(res) {
+						if (res.confirm) {
+							const p = new Promise((resolve, reject) => {
+								const base = db.collection(plan);
+								base.where({
+									_id: _this.planId
+								}).remove().then(() => {
+									resolve(true);
+								}).catch((err) => {
+									reject(err);
+								});
+							});
+							uni.showLoading({
+								mask: true
+							})
+							Promise.all([_this.deleteRecords(), _this.deleteDetails(), p]).then(res => {
+								uni.showToast({
+									title: '删除成功'
+								})
+								setTimeout(() => {
+									uni.navigateBack({
+										delta: 1
+									});
+								}, 300)
+							}).catch(err => {
+								uni.showModal({
+									content: JSON.stringify(err) || '删除失败',
+									showCancel: false
+								})
+							}).finally(() => {
+								uni.hideLoading();
+							})
+						}
+					}
+				});
+			},
+			deleteDetails() {
+				return new Promise((resolve, reject) => {
+					const base = db.collection(planDetailsDB);
+					base.where({
+						planId: this.planId
+					}).remove().then(() => {
+						resolve(true);
+					}).catch((err) => {
+						reject(err);
+					});
+				});
+			},
+			deleteRecords() {
+				return new Promise((resolve, reject) => {
+					const base = db.collection(recordsDB);
+					base.where({
+						planId: this.planId
+					}).get().then(res => {
+						if (res.result.data.length) {
+							res.result.data.map(async (item) => {
+								return await base.where({
+									_id: item._id
+								}).remove();
+							});
+						}
+						resolve(true);
+					}).catch(err => {
+						reject(err);
+					});
+				});
 			}
-		},
+		}
 	}
 </script>
 
 <style lang="scss" scoped>
-	.steps {
-		display: flex;
-		flex-direction: row-reverse;
-
-		&__text-container {
-			display: flex;
-			flex-direction: column;
-			flex: 1;
-		}
-
-		&__container {
-			display: inline-flex;
-			width: 30px;
-			flex-direction: column;
-		}
-
-		&__text {
-			padding: 6px 15px 6px 0;
-			border-bottom-style: solid;
-			border-bottom-width: 1px;
-			border-bottom-color: #e5e5e5;
-			display: flex;
-			flex-direction: column;
-
-			&.active {
-				color: #67C23A;
-			}
-
-			&--item {
-				display: flex;
-
-				&-text {
-					width: 33.3%;
-				}
-			}
-		}
-
-		&__line-item {
-			display: flex;
-			flex-direction: column;
-			flex: 1;
-			align-items: center;
-			justify-content: center;
-
-			&:first-child {
-				.steps__line-item--before {
-					background-color: transparent;
-				}
-			}
-
-			&--before {
-				width: 1px;
-				height: 6px;
-				background-color: #999;
-				transform: translate(0px, -1px);
-
-				&.active {
-					background-color: #67C23A;
-				}
-			}
-
-			&--circle {
-				width: 5px;
-				height: 5px;
-				border-radius: 100px;
-				background-color: #999;
-				margin: 4px 0px 5px 0px;
-
-				&.active {
-					background-color: #67C23A;
-				}
-			}
-
-			&--check {
-				height: 14px;
-				line-height: 14px;
-				margin: 2px 0px;
-			}
-
-			&--after {
-				width: 1px;
-				background-color: #999;
-				flex: 1;
-				transform: translate(0px, 1px);
-
-				&.active {
-					background-color: #67C23A;
-				}
-			}
-		}
-	}
-	.form-button{
+	.form-button {
 		width: 40%;
 		display: inline-block;
 		line-height: 2;

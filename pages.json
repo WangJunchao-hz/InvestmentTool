@@ -20,6 +20,11 @@
 			"navigationBarTitleText": "计划详情"
 		}
 	}, {
+		"path": "pages/assistant/records",
+		"style": {
+			"navigationBarTitleText": "操作记录"
+		}
+	},{
 		"path": "pages/assets/index",
 		"style": {
 			"navigationBarTitleText": "资产"

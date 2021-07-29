@@ -174,6 +174,7 @@
 						userId: dbCmd.eq(this.userId),
 						opType: 'buy',
 					}).orderBy('updateDate desc').get().then(res => {
+						resolve(res.result.data);
 						if (res.result.data.length) {
 							this.planText = `${res.result.data.length} 条计划进行中`;
 							this.planLists = [];
@@ -195,7 +196,6 @@
 							typeTolist.forEach(item => {
 								this.planLists.push(item)
 							})
-							resolve(res.result.data);
 						}
 					}).catch(err => {
 						reject(err);

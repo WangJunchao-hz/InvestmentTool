@@ -46,6 +46,7 @@
 				remarks: ''
 			}
 			return {
+				planId: '',
 				userId: '',
 				formData,
 				planType: {
@@ -57,12 +58,33 @@
 				}
 			}
 		},
+		onLoad(op) {
+			this.planId = op.id;
+		},
 		onReady() {
 			this.userId = getApp().globalData.userId
 			this.$refs.form.setRules(this.rules)
 			this.getAccountTypes()
+			if (this.planId) {
+				this.getPlan();
+			}
 		},
 		methods: {
+			getPlan() {
+				uni.setNavigationBarTitle({
+					title: "编辑计划"
+				})
+				db.collection(planDB).where({
+					_id: this.planId
+				}).get().then(res => {
+					if (res.result.data.length) {
+						const planInfo = res.result.data[0];
+						this.formData.planName = planInfo.planName;
+						this.formData.remarks = planInfo.remarks;
+						this.planType = planInfo.planType;
+					}
+				})
+			},
 			getAccountTypes() {
 				db.collection(typesDB).where('classify == "accountType"').get().then(res => {
 					this.accountTypes = res.result.data
@@ -93,37 +115,65 @@
 
 			submitForm() {
 				const time = new Date().getTime();
-				const params = {
-					userId: this.userId,
-					...this.formData,
-					planType: this.planType,
-					isTotalProfit: true,
-					preAdvise: 1,
-					totalPercentage: 0,
-					opType: '',
-					createDate: time,
-					updateDate: time
+				if (this.planId) {
+					const updateParams = {
+						...this.formData,
+						planType: this.planType,
+						updateDate: time
+					}
+					db.collection(planDB).where({
+						_id: this.planId
+					}).update(updateParams).then(res => {
+						uni.showToast({
+							icon: 'none',
+							title: '更新成功'
+						})
+						setTimeout(() => {
+							uni.navigateBack({
+								delta: 1
+							})
+						}, 500)
+					}).catch(err => {
+						uni.showModal({
+							content: err.message || '请求服务失败',
+							showCancel: false
+						})
+					}).finally(() => {
+						uni.hideLoading()
+					})
+				} else {
+					const params = {
+						userId: this.userId,
+						...this.formData,
+						planType: this.planType,
+						isTotalProfit: true,
+						preAdvise: 1,
+						totalPercentage: 0,
+						opType: '',
+						createDate: time,
+						updateDate: time
+					}
+					console.log(params);
+					// 使用 clientDB 提交数据
+					db.collection(planDB).add(params).then((res) => {
+						uni.showToast({
+							icon: 'none',
+							title: '新增成功'
+						})
+						this.getOpenerEventChannel().emit('refreshData')
+						setTimeout(() =>
+							uni.switchTab({
+								url: "/pages/assistant/index"
+							}), 500)
+					}).catch((err) => {
+						uni.showModal({
+							content: err.message || '请求服务失败',
+							showCancel: false
+						})
+					}).finally(() => {
+						uni.hideLoading()
+					})
 				}
-				console.log(params);
-				// 使用 clientDB 提交数据
-				db.collection(planDB).add(params).then((res) => {
-					uni.showToast({
-						icon: 'none',
-						title: '新增成功'
-					})
-					this.getOpenerEventChannel().emit('refreshData')
-					setTimeout(() =>
-						uni.switchTab({
-							url: "/pages/assistant/index"
-						}), 500)
-				}).catch((err) => {
-					uni.showModal({
-						content: err.message || '请求服务失败',
-						showCancel: false
-					})
-				}).finally(() => {
-					uni.hideLoading()
-				})
 			}
 		}
 	}
