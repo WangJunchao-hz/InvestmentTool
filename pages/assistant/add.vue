@@ -153,7 +153,7 @@
 						createDate: time,
 						updateDate: time
 					}
-					console.log(params);
+					// console.log(params);
 					// 使用 clientDB 提交数据
 					db.collection(planDB).add(params).then((res) => {
 						uni.showToast({

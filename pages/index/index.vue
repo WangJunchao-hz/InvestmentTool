@@ -144,11 +144,11 @@
 						userId: dbCmd.eq(this.userId)
 					}).get().then(res => {
 						resolve(res.result.data);
+						this.total = 0;
+						this.fixedAsset = 0;
+						this.floatAsset = 0;
+						this.liabilities = 0;
 						if (res.result.data.length) {
-							this.total = 0;
-							this.fixedAsset = 0;
-							this.floatAsset = 0;
-							this.liabilities = 0;
 							res.result.data.forEach(item => {
 								switch (item.type.relationType) {
 									case 'fixedAsset':
@@ -180,9 +180,10 @@
 						opType: 'buy',
 					}).orderBy('updateDate desc').get().then(res => {
 						resolve(res.result.data);
+						this.planLists = [];
+						this.planText = '暂无进行中的计划';
 						if (res.result.data.length) {
 							this.planText = `${res.result.data.length} 条计划进行中`;
-							this.planLists = [];
 							const typeTolist = new Map();
 							res.result.data.forEach(item => {
 								const hasExt = typeTolist.get(item.planType.field)

@@ -65,6 +65,7 @@
 				db.collection(recordsDB).where({
 					planId: dbCmd.eq(this.planId)
 				}).orderBy('updateDate desc').get().then(res => {
+					this.recordLists = [];
 					if (res.result.data.length) {
 						this.recordLists = res.result.data;
 					}
@@ -112,6 +113,7 @@
 					buyAmount: 0,
 					onceBuyAmount: 0,
 					totalBuyAmount: 0,
+					preAdvise: 0,
 					updateDate: time
 				};
 				if (this.recordLists.length > 1) {
@@ -120,6 +122,7 @@
 						...last,
 						updateDate: time
 					}
+					delete params._id
 				}
 				db.collection(planDetailsDB).where({
 					planId: this.planId
@@ -127,7 +130,7 @@
 				db.collection(plan).where({
 					_id: this.planId
 				}).update({
-					isTotalProfit: params.isTotalProfit || 0,
+					isTotalProfit: params.isTotalProfit || true,
 					preAdvise: params.preAdvise || 1,
 					totalPercentage: params.totalPercentage || 0,
 					opType: params.opType,

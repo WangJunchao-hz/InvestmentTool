@@ -89,7 +89,7 @@
 					</uni-grid-item>
 					<uni-grid-item>
 						<view class="grid-item-box">
-							<button :disabled="detailData.opType === 'sell'" plain
+							<button :disabled="detailData.opType === 'sell' || !detailData.opType" plain
 								style="border-color: #67C23A; color: #67C23A;" @click="opClick(0)">卖
 								出</button>
 						</view>
@@ -421,7 +421,7 @@
 					opType: params.opType,
 					updateDate: params.updateDate
 				});
-				console.log(params);
+				// console.log(params);
 				return params;
 			},
 			handleBuy(params, lastInfo) {

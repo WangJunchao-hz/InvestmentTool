@@ -54,8 +54,8 @@
 				db.collection(planDB).where({
 					userId: dbCmd.eq(this.userId)
 				}).orderBy('updateDate desc').get().then(res => {
+					this.planLists = [];
 					if (res.result.data.length) {
-						this.planLists = [];
 						const typeTolist = new Map();
 						res.result.data.forEach(item => {
 							const hasExt = typeTolist.get(item.planType.field)
