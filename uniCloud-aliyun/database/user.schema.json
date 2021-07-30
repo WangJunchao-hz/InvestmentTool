@@ -19,6 +19,14 @@
 		"userInfo": {
 			"bsonType": "object",
 			"description": "用户信息"
+		},
+		"createDate": {
+			"bsonType": "timestamp",
+			"description": "创建时间"
+		},
+		"updateDate": {
+			"bsonType": "timestamp",
+			"description": "更新时间"
 		}
 	}
 }

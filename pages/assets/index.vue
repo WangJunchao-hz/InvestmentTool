@@ -76,12 +76,12 @@
 				db.collection(accountDB).where({
 					userId: dbCmd.eq(this.userId)
 				}).orderBy('updateDate desc').get().then(res => {
+					this.accountLists = [];
+					this.total = 0;
+					this.fixedAsset = 0;
+					this.floatAsset = 0;
+					this.liabilities = 0;
 					if (res.result.data.length) {
-						this.accountLists = [];
-						this.total = 0;
-						this.fixedAsset = 0;
-						this.floatAsset = 0;
-						this.liabilities = 0;
 						const typeTolist = new Map();
 						res.result.data.forEach(item => {
 							const hasExt = typeTolist.get(item.type.field)

@@ -75,20 +75,15 @@
 													uni.getUserInfo({
 														provider,
 														success(res1) {
-															uniCloud.database().collection(
-																'user').add({
-																openid: data
-																	.openid,
-																userInfo: res1
-																	.userInfo
-															})
+															_this.addUser(data.openid, res1
+																.userInfo);
 														}
 													})
 												}
 											});
 										}
 									},
-									fail() {
+									fail(err) {
 										uni.setStorage({
 											key: 'openid',
 											data: data.openid,
@@ -97,11 +92,8 @@
 												uni.getUserInfo({
 													provider,
 													success(res1) {
-														uniCloud.database().collection(
-															'user').add({
-															openid: data.openid,
-															userInfo: res1.userInfo
-														})
+														_this.addUser(data.openid, res1
+															.userInfo);
 													}
 												})
 											}
@@ -146,6 +138,29 @@
 			},
 			initApp(openid) {
 				getApp().globalData.userId = openid
+			},
+			addUser(id, info) {
+				const time = new Date().getTime();
+				const base = uniCloud.database().collection('user');
+				base.where({
+					openid: id
+				}).get().then(res => {
+					if (!res.result.data.length) {
+						base.add({
+							openid: id,
+							userInfo: info,
+							createDate: time,
+							updateDate: time
+						})
+					} else {
+						base.where({
+							openid: id
+						}).update({
+							userInfo: info,
+							updateDate: time
+						})
+					}
+				})
 			}
 		}
 	}
@@ -326,7 +341,8 @@
 				&-text {
 					width: 42%;
 					flex-shrink: 0;
-					&:first-child{
+
+					&:first-child {
 						width: 16%;
 					}
 				}

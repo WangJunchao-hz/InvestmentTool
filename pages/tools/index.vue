@@ -14,9 +14,7 @@
 	export default {
 		data() {
 			return {
-				toolLists: [{
-					text: '类型'
-				}]
+				toolLists: []
 			}
 		},
 		created() {},

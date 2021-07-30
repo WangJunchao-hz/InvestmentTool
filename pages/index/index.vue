@@ -92,12 +92,6 @@
 					text: "资产",
 					active: false,
 					path: '/pages/assets/add'
-				}, {
-					iconPath: "/static/images/gongju.png",
-					selectedIconPath: "/static/images/gongju-active.png",
-					text: "工具",
-					active: false,
-					path: '/pages/tools/add'
 				}]
 			}
 		},

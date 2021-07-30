@@ -16,6 +16,26 @@
 			"bsonType": "string",
 			"description": "账户id"
 		},
+		"userId": {
+			"bsonType": "string",
+			"description": "用户唯一标识"
+		},
+		"type": {
+			"bsonType": "object",
+			"label": "账户类型"
+		},
+		"remarks": {
+			"bsonType": "string",
+			"label": "备注",
+			"description": "请输入"
+		},
+		"name": {
+			"bsonType": "string",
+			"trim": "both",
+			"maxLength": 8,
+			"label": "账户名称",
+			"description": "请输入账户名称"
+		},
 		"amount": {
 			"bsonType": "double",
 			"minimum": 0,
