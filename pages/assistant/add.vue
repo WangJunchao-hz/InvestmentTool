@@ -88,7 +88,9 @@
 			getAccountTypes() {
 				db.collection(typesDB).where('classify == "accountType"').get().then(res => {
 					this.accountTypes = res.result.data
-					this.planType = this.accountTypes[0]
+					if (!this.planType.name) {
+						this.planType = this.accountTypes[0]
+					}
 				}).catch(() => {
 					uni.showToast({
 						title: "类型获取失败",
