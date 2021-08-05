@@ -2,21 +2,24 @@
 	<view>
 		<view v-if="indexData" class="asset-total">
 			<view class="part1">
-				<text>资产汇总</text>
-				<text class="amount">{{total}}¥</text>
+				<view style="display: flex; justify-content: center; align-items: center;">
+					<text style="margin-right: 6px;">资产汇总</text>
+					<uni-icons @click="switchSee" :type="isSee" color="#fff"></uni-icons>
+				</view>
+				<text class="amount">{{total}}</text>
 			</view>
 			<view class="part2">
 				<view>
 					<text>固定资产</text>
-					<text class="amount">{{fixedAsset}}¥</text>
+					<text class="amount">{{fixedAsset}}</text>
 				</view>
 				<view>
 					<text>浮动资产</text>
-					<text class="amount">{{floatAsset}}¥</text>
+					<text class="amount">{{floatAsset}}</text>
 				</view>
 				<view>
 					<text>负债</text>
-					<text class="amount">{{liabilities}}¥</text>
+					<text class="amount">{{liabilities}}</text>
 				</view>
 			</view>
 		</view>
@@ -67,13 +70,18 @@
 	export default {
 		data() {
 			return {
+				isSee: 'eye-slash',
 				nodata: false,
 				indexData: false,
 				userId: '',
 				total: 0,
+				cacheTotal: 0,
 				fixedAsset: 0,
+				cacheFixedAsset: 0,
 				floatAsset: 0,
+				cacheFloatAsset: 0,
 				liabilities: 0,
+				cacheLiabilities: 0,
 				planLists: [],
 				planText: '暂无进行中的计划',
 				pattern: {
@@ -110,6 +118,29 @@
 			}
 		},
 		methods: {
+			switchSee() {
+				if (this.isSee === 'eye-slash') {
+					this.isSee = 'eye';
+					this.cacheTotal = this.total;
+					this.cacheFixedAsset = this.fixedAsset;
+					this.cacheFloatAsset = this.floatAsset;
+					this.cacheLiabilities = this.liabilities;
+					this.total = '******';
+					this.fixedAsset = '******';
+					this.floatAsset = '******';
+					this.liabilities = '******';
+				} else {
+					this.isSee = 'eye-slash';
+					this.total = this.cacheTotal;
+					this.fixedAsset = this.cacheFixedAsset;
+					this.floatAsset = this.cacheFloatAsset;
+					this.liabilities = this.cacheLiabilities;
+				}
+				uni.setStorage({
+					key: 'isSee',
+					data: this.isSee
+				})
+			},
 			initPage() {
 				uni.showLoading({
 					mask: true
@@ -158,8 +189,29 @@
 											.amount);
 										break;
 								}
-								const a = this.$NP.plus(this.fixedAsset, this.floatAsset);
-								this.total = this.$NP.minus(a, this.liabilities);
+							})
+							const a = this.$NP.plus(this.fixedAsset, this.floatAsset);
+							this.total = this.$NP.minus(a, this.liabilities);
+							this.total = this.total + '¥';
+							this.fixedAsset = this.fixedAsset + '¥';
+							this.floatAsset = this.floatAsset + '¥';
+							this.liabilities = this.liabilities + '¥';
+							const _this = this;
+							uni.getStorage({
+								key: 'isSee',
+								success(res) {
+									_this.isSee = res.data;
+									if (res.data === 'eye') {
+										_this.cacheTotal = _this.total;
+										_this.cacheFixedAsset = _this.fixedAsset;
+										_this.cacheFloatAsset = _this.floatAsset;
+										_this.cacheLiabilities = _this.liabilities;
+										_this.total = '******';
+										_this.fixedAsset = '******';
+										_this.floatAsset = '******';
+										_this.liabilities = '******';
+									}
+								}
 							})
 						}
 					}).catch(err => {
