@@ -35,6 +35,10 @@
 			"bsonType": "double",
 			"description": "总共金额盈亏百分比"
 		},
+		"totalProfitAdnLoss": {
+			"bsonType": "double",
+			"description": "总共盈亏金额"
+		},
 		"isTotalProfit": {
 			"bsonType": "bool",
 			"description": "总体是否盈利",

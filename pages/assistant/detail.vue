@@ -146,7 +146,8 @@
 								</text>
 								<text style="width: 50%;" v-else
 									:class="item.isProfit ? 'success' : 'danger'">盈亏额：{{item.profitAdnLoss}}</text>
-								<uni-dateformat class="info" style="width: 50%;text-align: right;" :date="item.updateDate" />
+								<uni-dateformat class="info" style="width: 50%;text-align: right;"
+									:date="item.updateDate" />
 							</view>
 						</view>
 					</view>
@@ -418,6 +419,7 @@
 					isTotalProfit: params.isTotalProfit,
 					preAdvise: params.preAdvise,
 					totalPercentage: params.totalPercentage,
+					totalProfitAdnLoss: params.totalProfitAdnLoss,
 					opType: params.opType,
 					updateDate: params.updateDate
 				});

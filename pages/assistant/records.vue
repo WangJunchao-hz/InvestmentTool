@@ -133,6 +133,7 @@
 					isTotalProfit: params.isTotalProfit || true,
 					preAdvise: params.preAdvise || 1,
 					totalPercentage: params.totalPercentage || 0,
+					totalProfitAdnLoss: params.totalProfitAdnLoss || 0,
 					opType: params.opType,
 					updateDate: params.updateDate
 				});

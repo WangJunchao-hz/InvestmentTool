@@ -10,7 +10,11 @@
 					<template #body>
 						<view class="list-item__body">
 							<view class="list-item__body-title">
-								<text>{{subList.planName}}</text>
+								<text>
+									{{subList.planName}}
+									<text
+										:class="subList.isTotalProfit? 'success' : 'danger'">({{subList.totalProfitAdnLoss || 0}})</text>
+								</text>
 							</view>
 							<view class="list-item__body-text">
 								{{subList.remarks}}
