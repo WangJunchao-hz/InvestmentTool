@@ -270,6 +270,8 @@
 				}).get().then(res => {
 					if (res.result.data.length) {
 						this.detailData = res.result.data[0]
+						this.formData.position = this.detailData.preAdvise
+						this.formData.targetPercent = this.detailData.targetPercent
 						this.getRecordLists()
 						this.nodata = false;
 					} else {
@@ -436,9 +438,9 @@
 					}
 
 					// 如果仓位改变了，缓存收益重置
-					if (params.position !== lastInfo.position) {
-						params.cachePercentage = 0;
-					}
+					// if (params.position !== lastInfo.position) {
+					// 	params.cachePercentage = 0;
+					// }
 					params.preAdvise = params.position;
 				} else {
 					params.totalBuyAmount = params.buyAmount;
@@ -474,8 +476,11 @@
 				// 仓位预测
 				params.cachePercentage = this.$NP.plus(lastInfo.cachePercentage, params.percentage);
 				if (params.cachePercentage <= -lastInfo.targetPercent) {
-					params.preAdvise = lastInfo.position + 1;
-					params.cachePercentage = 0;
+					const p = this.$NP.round(this.$NP.divide(params.cachePercentage, -lastInfo.targetPercent),0);
+					params.preAdvise = p;
+					const sy = this.$NP.plus(params.cachePercentage,  lastInfo.targetPercent)
+					params.cachePercentage = this.$NP.round(this.$NP.divide(sy, params.preAdvise),2);
+					console.log(params.cachePercentage,sy,lastInfo,p)
 				} else if (params.cachePercentage >= 0) {
 					params.cachePercentage = 0;
 				}
