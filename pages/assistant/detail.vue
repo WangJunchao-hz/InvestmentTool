@@ -475,14 +475,16 @@
 
 				// 仓位预测
 				params.cachePercentage = this.$NP.plus(lastInfo.cachePercentage, params.percentage);
-				if (params.cachePercentage <= -lastInfo.targetPercent) {
-					const p = this.$NP.round(this.$NP.divide(params.cachePercentage, -lastInfo.targetPercent),0);
-					params.preAdvise = p;
-					const sy = this.$NP.plus(params.cachePercentage,  lastInfo.targetPercent)
-					params.cachePercentage = this.$NP.round(this.$NP.divide(sy, params.preAdvise),2);
-					console.log(params.cachePercentage,sy,lastInfo,p)
-				} else if (params.cachePercentage >= 0) {
+				if (params.cachePercentage < 0) {
+					const p = Math.floor(this.$NP.divide(params.percentage, lastInfo.targetPercent));
+					params.preAdvise = lastInfo.position - p;
+					const sy = this.$NP.plus(params.cachePercentage, lastInfo.targetPercent)
+					params.cachePercentage = this.$NP.round(this.$NP.divide(sy, params.preAdvise), 2);
+					console.log(p, sy)
+				} else {
+					// 全部回本或盈利，reset
 					params.cachePercentage = 0;
+					params.preAdvise = 1
 				}
 			},
 			resetForm() {
