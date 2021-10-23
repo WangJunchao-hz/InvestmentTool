@@ -55,8 +55,7 @@ const validator = {
         "format": "int"
       },
       {
-        "minimum": 1,
-        "maximum": 10
+        "minimum": 1
       }
     ],
     "label": "仓位",

@@ -476,15 +476,42 @@
 				// 仓位预测
 				params.cachePercentage = this.$NP.plus(lastInfo.cachePercentage, params.percentage);
 				if (params.cachePercentage < 0) {
-					const p = Math.floor(this.$NP.divide(params.percentage, lastInfo.targetPercent));
-					params.preAdvise = lastInfo.position - p;
-					const sy = this.$NP.plus(params.cachePercentage, lastInfo.targetPercent)
-					params.cachePercentage = this.$NP.round(this.$NP.divide(sy, params.preAdvise), 2);
-					console.log(p, sy)
-				} else {
-					// 全部回本或盈利，reset
-					params.cachePercentage = 0;
-					params.preAdvise = 1
+					let c = params.cachePercentage
+					let p = lastInfo.position
+					if (c === -lastInfo.targetPercent) {
+						params.cachePercentage = 0
+						params.preAdvise = p + 1
+					} else if (c < -lastInfo.targetPercent) {
+						let pl = p + 1
+						c = c + lastInfo.targetPercent
+						c = this.$NP.round(c * this.$NP.divide(p, pl), 2)
+						while (c <= -lastInfo.targetPercent) {
+							c = c + lastInfo.targetPercent
+							p = p + 1
+							pl = p + 1
+							c = this.$NP.round(c * this.$NP.divide(p, pl), 2)
+						}
+						params.preAdvise = pl
+						params.cachePercentage = c
+					}
+				} else if (params.cachePercentage > 0) {
+					let c = params.cachePercentage
+					let p = lastInfo.position
+					if (p === 1) {
+						params.cachePercentage = 0;
+						params.preAdvise = 1
+					} else if (p > 1) {
+						let pl = p - 1
+						c = this.$NP.round(c * this.$NP.divide(p, pl), 2)
+						while (c > lastInfo.targetPercent && pl > 1) {
+							p = pl
+							pl = p - 1
+							c = c - lastInfo.targetPercent
+							c = this.$NP.round(c * this.$NP.divide(p, pl), 2)
+						}
+						params.preAdvise = pl
+						params.cachePercentage = c >= lastInfo.targetPercent ? 0 : (c - lastInfo.targetPercent)
+					}
 				}
 			},
 			resetForm() {

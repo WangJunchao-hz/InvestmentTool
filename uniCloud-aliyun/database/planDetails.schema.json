@@ -104,7 +104,6 @@
 			"bsonType": "int",
 			"description": "买入的仓位",
 			"minimum": 1,
-			"maximum": 10,
 			"defaultValue": 1,
 			"label": "仓位"
 		},
