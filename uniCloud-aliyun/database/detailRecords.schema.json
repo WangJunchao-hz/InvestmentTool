@@ -1,7 +1,7 @@
 // 文档教程: https://uniapp.dcloud.net.cn/uniCloud/schema
 {
 	"bsonType": "object",
-	"required": ["buyAveragePrice", "buyAmount", "sellAveragePrice", "sellAmount", "targetPercent", "amount"],
+	"required": ["buyPrice", "buyAmount", "sellPrice", "sellAmount", "targetPercent", "amount"],
 	"permission": {
 		"read": true,
 		"create": true,
@@ -21,6 +21,12 @@
 			"defaultValue": "buy",
 			"description": "操作类型"
 		},
+		"buyPrice": {
+			"bsonType": "double",
+			"label": "买入价格",
+			"minimum": 0,
+			"description": "买入价格"
+		},
 		"buyAmount": {
 			"bsonType": "double",
 			"label": "买入金额",
@@ -39,11 +45,47 @@
 			"minimum": 0,
 			"description": "一次交易累计买入总额"
 		},
+		"sellPrice": {
+			"bsonType": "double",
+			"label": "卖出价格",
+			"minimum": 0,
+			"description": "卖出价格"
+		},
 		"sellAmount": {
 			"bsonType": "double",
 			"label": "卖出金额",
 			"minimum": 0,
 			"description": "卖出金额"
+		},
+		"averagePrice": {
+			"bsonType": "double",
+			"label": "均价",
+			"minimum": 0,
+			"description": "平均持仓价格"
+		},
+		"increasePrice": {
+			"bsonType": "double",
+			"label": "加仓价",
+			"minimum": 0,
+			"description": "下次加仓价格"
+		},
+		"oncePrice": {
+			"bsonType": "double",
+			"label": "一次操作的开始价",
+			"minimum": 0,
+			"description": "一次操作的开始价"
+		},
+		"cumulativeNum":{
+			"bsonType":"int",
+			"label": "累计盈亏次数",
+			"minimum": 0,
+			"description": "累计盈亏次数"
+		},
+		"reducePrice": {
+			"bsonType": "double",
+			"label": "减仓价",
+			"minimum": 0,
+			"description": "下次减仓价格"
 		},
 		"totalSellAmount": {
 			"bsonType": "double",

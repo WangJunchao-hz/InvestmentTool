@@ -27,6 +27,31 @@
 			"bsonType": "object",
 			"label": "计划类型"
 		},
+		"operateType": {
+			"bsonType": "object",
+			"label": "操作类型"
+		},
+		"strategyType": {
+			"bsonType": "object",
+			"label": "策略类型"
+		},
+		"cumulativeNum":{
+			"bsonType":"int",
+			"label": "累计盈亏次数",
+			"minimum": 0,
+			"description": "累计盈亏次数"
+		},
+		"increasePrice": {
+			"bsonType": "double",
+			"label": "加仓价",
+			"minimum": 0,
+			"description": "下次加仓价格"
+		},
+		"isProfit": {
+			"bsonType": "bool",
+			"description": "本次是否盈利",
+			"defaultValue": true
+		},
 		"remarks": {
 			"bsonType": "string",
 			"label": "备注"

@@ -5,6 +5,8 @@
 				<view class="group__title">
 					<view style="width: 100%;display: flex;justify-content: space-between;padding-right: 15px;">
 						<view>
+							<text class="buy-long" v-if="operateType === 'buyLong'">多</text>
+							<text class="sell-short" v-else-if="operateType === 'sellShort'">空</text>
 							{{planInfo.planName}} ({{planInfo.planType.name}})
 							<uni-icons type="compose" size="18px" style="margin-left: 8px;"
 								@click="navJump('/pages/assistant/add')"></uni-icons>
@@ -24,9 +26,8 @@
 					</template>
 					<template #footer>
 						<view class="list-item__footer primary">
-							<text :class="detailData.cachePercentage < 0 ? 'danger':'success'"
-								style="margin-left: 18px;">
-								亏损阙值: {{detailData.cachePercentage || 0}}%</text>
+							<text :class="detailData.isProfit ? 'success':'danger'" style="margin-left: 18px;">
+								累计{{detailData.isProfit ? '盈利':'亏损'}}次数: {{detailData.cumulativeNum || 0}}</text>
 						</view>
 					</template>
 				</uni-list-item>
@@ -42,9 +43,8 @@
 						</view>
 					</template>
 					<template #footer>
-						<view class="list-item__footer">
-							<uni-dateformat class="list-item__body-text" :date="planInfo.updateDate">
-							</uni-dateformat>
+						<view class="list-item__footer primary">
+							金额预测仓位：{{detailData.preAdvise || 1}}
 						</view>
 					</template>
 				</uni-list-item>
@@ -57,15 +57,33 @@
 				</template>
 				<uni-grid :column="3" :square="false">
 					<uni-grid-item>
-						<view class="grid-item-box">
+						<view class="grid-item-box info">
 							<text class="text">买入金额</text>
 							<text class="text">{{detailData.buyAmount}}</text>
 						</view>
 					</uni-grid-item>
 					<uni-grid-item>
-						<view class="grid-item-box primary">
-							<text class="text">仓位</text>
-							<text class="text">{{detailData.position}}</text>
+						<view class="grid-item-box">
+							<text class="text">标记价</text>
+							<text class="text">{{detailData.oncePrice}}</text>
+						</view>
+					</uni-grid-item>
+					<uni-grid-item>
+						<view class="grid-item-box">
+							<button plain style="border-color: #409EFF; color: #409EFF;" @click="opClick(2)">更
+								新</button>
+						</view>
+					</uni-grid-item>
+					<uni-grid-item>
+						<view class="grid-item-box info">
+							<text class="text">卖出金额</text>
+							<text class="text">{{detailData.sellAmount}}</text>
+						</view>
+					</uni-grid-item>
+					<uni-grid-item>
+						<view class="grid-item-box warning">
+							<text class="text">加仓价</text>
+							<text class="text">{{detailData.increasePrice}}</text>
 						</view>
 					</uni-grid-item>
 					<uni-grid-item>
@@ -76,15 +94,15 @@
 						</view>
 					</uni-grid-item>
 					<uni-grid-item>
-						<view class="grid-item-box">
-							<text class="text">卖出金额</text>
-							<text class="text">{{detailData.sellAmount}}</text>
+						<view class="grid-item-box" :class="detailData.isProfit?'success':'danger'">
+							<text class="text">{{detailData.isProfit?'盈利':'亏损'}}({{detailData.percentage}}%)</text>
+							<text class="text">{{detailData.profitAdnLoss}}</text>
 						</view>
 					</uni-grid-item>
 					<uni-grid-item>
-						<view class="grid-item-box" :class="detailData.isProfit?'success':'danger'">
-							<text class="text">{{detailData.isProfit?'盈利':'亏损'}}</text>
-							<text class="text">{{detailData.profitAdnLoss}}</text>
+						<view class="grid-item-box primary">
+							<text class="text">仓位</text>
+							<text class="text">{{detailData.position}}</text>
 						</view>
 					</uni-grid-item>
 					<uni-grid-item>
@@ -92,27 +110,6 @@
 							<button :disabled="detailData.opType === 'sell' || !detailData.opType" plain
 								style="border-color: #67C23A; color: #67C23A;" @click="opClick(0)">卖
 								出</button>
-						</view>
-					</uni-grid-item>
-					<uni-grid-item>
-						<view class="grid-item-box" :class="detailData.isProfit ? 'success' : 'danger'">
-							<text class="text">盈亏</text>
-							<text class="text">
-								{{detailData.percentage}}%
-								<text class="primary">({{detailData.preAdvise}})</text>
-							</text>
-						</view>
-					</uni-grid-item>
-					<uni-grid-item>
-						<view class="grid-item-box" :class="detailData.isOnceProfit ? 'success' : 'danger'">
-							<text class="text">累计盈亏</text>
-							<text class="text">{{detailData.oncePercentage}}%</text>
-						</view>
-					</uni-grid-item>
-					<uni-grid-item>
-						<view class="grid-item-box" :class="detailData.isTotalProfit ? 'success' : 'danger'">
-							<text class="text">总盈亏</text>
-							<text class="text">{{detailData.totalPercentage}}%</text>
 						</view>
 					</uni-grid-item>
 				</uni-grid>
@@ -174,9 +171,15 @@
 			<view style="background-color: #ffffff;padding: 15px;border-radius: 2px 2px 0 0;">
 				<uni-forms ref="form" :value="formData" validate-trigger="submit" err-show-type="toast"
 					labelAlign="right" labelWidth="85">
+					<uni-forms-item v-if="opType === 2" name="buyPrice" label="标记价" required>
+						<uni-easyinput placeholder="请输入" v-model="formData.buyPrice" type="digit"></uni-easyinput>
+					</uni-forms-item>
 					<uni-forms-item v-if="opType === 1" name="buyAmount" label="买入金额" required>
 						<uni-easyinput placeholder="请输入" v-model="formData.buyAmount" type="digit"></uni-easyinput>
 					</uni-forms-item>
+					<!-- <uni-forms-item v-if="opType === 0" name="sellPrice" label="卖出价" required>
+						<uni-easyinput placeholder="请输入" v-model="formData.sellPrice" type="digit"></uni-easyinput>
+					</uni-forms-item> -->
 					<uni-forms-item v-if="opType === 0" name="sellAmount" label="卖出金额" required>
 						<uni-easyinput placeholder="请输入" v-model="formData.sellAmount" type="digit"></uni-easyinput>
 					</uni-forms-item>
@@ -220,7 +223,9 @@
 		data() {
 			const formData = {
 				buyAmount: '',
+				buyPrice: '',
 				sellAmount: '',
+				sellPrice: '',
 				targetPercent: 10,
 				position: 1
 			}
@@ -253,6 +258,14 @@
 		onReady() {
 			this.$refs.form.setRules(this.rules)
 		},
+		computed: {
+			strategyType() {
+				return this.planInfo.strategyType && this.planInfo.strategyType.field
+			},
+			operateType() {
+				return this.planInfo.operateType && this.planInfo.operateType.field
+			}
+		},
 		methods: {
 			getPlan() {
 				db.collection(plan).where({
@@ -270,7 +283,7 @@
 				}).get().then(res => {
 					if (res.result.data.length) {
 						this.detailData = res.result.data[0]
-						this.formData.position = this.detailData.preAdvise
+						this.formData.position = this.detailData.position
 						this.formData.targetPercent = this.detailData.targetPercent
 						this.getRecordLists()
 						this.nodata = false;
@@ -368,7 +381,14 @@
 				const time = new Date().getTime();
 				const lastInfo = this.detailData ? this.detailData : {
 					buyAmount: 0,
+					buyPrice: 0,
 					sellAmount: 0,
+					sellPrice: 0,
+					increasePrice: 0,
+					reducePrice: 0,
+					oncePrice: 0,
+					cumulativeNum: 0,
+					averagePrice: 0,
 					position: this.formData.position,
 					targetPercent: this.formData.targetPercent,
 					totalBuyAmount: 0,
@@ -392,14 +412,22 @@
 				const params = {
 					...lastInfo,
 					planId: this.planId,
-					opType: this.opType === 1 ? 'buy' : 'sell',
 					updateDate: time
+				}
+				if (this.opType !== 2) {
+					params.opType = this.opType === 1 ? 'buy' : 'sell';
 				}
 				if (this.formData.buyAmount) {
 					params.buyAmount = Number(this.formData.buyAmount);
 				}
+				if (this.formData.buyPrice) {
+					params.buyPrice = Number(this.formData.buyPrice);
+				}
 				if (this.formData.sellAmount) {
 					params.sellAmount = Number(this.formData.sellAmount);
+				}
+				if (this.formData.sellPrice) {
+					params.sellPrice = Number(this.formData.sellPrice);
 				}
 				if (this.opType === 1) {
 					params.position = this.formData.position;
@@ -412,6 +440,17 @@
 					case 1: // 买入
 						this.handleBuy(params, lastInfo);
 						break;
+					case 2: // 更新标记价
+						// 计算仓位
+						const dif = this.$NP.times(params.buyPrice, params.targetPercent / 100);
+						if (this.operateType === 'buyLong') {
+							params.oncePrice = params.buyPrice;
+							params.increasePrice = this.$NP.minus(params.oncePrice, dif);
+						} else if (this.operateType === 'sellShort') {
+							params.oncePrice = params.buyPrice;
+							params.increasePrice = this.$NP.plus(params.oncePrice, dif);
+						}
+						break;
 				}
 				if (params && params._id) {
 					delete params._id
@@ -423,6 +462,9 @@
 					totalPercentage: params.totalPercentage,
 					totalProfitAdnLoss: params.totalProfitAdnLoss,
 					opType: params.opType,
+					cumulativeNum: params.cumulativeNum,
+					increasePrice: params.increasePrice,
+					isProfit: params.isProfit,
 					updateDate: params.updateDate
 				});
 				// console.log(params);
@@ -436,12 +478,9 @@
 					} else {
 						params.onceBuyAmount = this.$NP.plus(lastInfo.onceBuyAmount, params.buyAmount);
 					}
-
-					// 如果仓位改变了，缓存收益重置
-					// if (params.position !== lastInfo.position) {
-					// 	params.cachePercentage = 0;
-					// }
 					params.preAdvise = params.position;
+					params.sellAmount = 0;
+					params.profitAdnLoss = 0;
 				} else {
 					params.totalBuyAmount = params.buyAmount;
 					params.onceBuyAmount = params.buyAmount;
@@ -451,12 +490,18 @@
 				// total计算
 				params.totalSellAmount = this.$NP.plus(lastInfo.totalSellAmount, params.sellAmount);
 				params.totalProfitAdnLoss = this.$NP.minus(params.totalSellAmount, lastInfo.totalBuyAmount);
+				if (this.operateType === 'sellShort') {
+					params.totalProfitAdnLoss = -params.totalProfitAdnLoss;
+				}
 				params.isTotalProfit = params.totalProfitAdnLoss < 0 ? false : true;
 				params.totalPercentage = this.$NP.round(this.$NP.divide(params.totalProfitAdnLoss, lastInfo
 					.totalBuyAmount) * 100, 2);
 
 				// 单次计算
 				params.profitAdnLoss = this.$NP.minus(params.sellAmount, lastInfo.buyAmount);
+				if (this.operateType === 'sellShort') {
+					params.profitAdnLoss = -params.profitAdnLoss;
+				}
 				params.isProfit = params.profitAdnLoss < 0 ? false : true;
 				params.percentage = this.$NP.round(this.$NP.divide(params.profitAdnLoss, lastInfo
 					.buyAmount) * 100, 2);
@@ -468,6 +513,9 @@
 					params.onceSellAmount = this.$NP.plus(lastInfo.onceSellAmount, params.sellAmount);
 				}
 				params.onceProfitAdnLoss = this.$NP.minus(params.onceSellAmount, lastInfo.onceBuyAmount);
+				if (this.operateType === 'sellShort') {
+					params.onceProfitAdnLoss = -params.onceProfitAdnLoss;
+				}
 				params.isOnceProfit = params.onceProfitAdnLoss < 0 ? false : true;
 				params.oncePercentage = this.$NP.round(this.$NP.divide(params.onceProfitAdnLoss, lastInfo
 					.onceBuyAmount) * 100, 2);
@@ -513,12 +561,21 @@
 						params.cachePercentage = c >= lastInfo.targetPercent ? 0 : (c - lastInfo.targetPercent)
 					}
 				}
+
+				// 盈亏累计
+				if (params.isProfit === lastInfo.isProfit) {
+					params.cumulativeNum++
+				} else {
+					params.cumulativeNum = 1
+				}
 			},
 			resetForm() {
+				this.formData.buyPrice = '';
 				this.formData.buyAmount = '';
+				this.formData.sellPrice = '';
 				this.formData.sellAmount = '';
-				this.formData.targetPercent = 10;
-				this.formData.position = 1;
+				this.formData.targetPercent = this.detailData.targetPercent;
+				this.formData.position = this.detailData.position;
 			},
 			navJump(path) {
 				uni.navigateTo({

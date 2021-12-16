@@ -10,6 +10,16 @@
 					<view class="picker-value">{{planType.name}}</view>
 				</picker>
 			</uni-forms-item>
+			<uni-forms-item label="操作类型" required>
+				<picker mode="selector" :range="operateTypes" range-key="name" @change="operateTypeChange">
+					<view class="picker-value">{{operateType.name}}</view>
+				</picker>
+			</uni-forms-item>
+			<uni-forms-item label="策略类型" required>
+				<picker mode="selector" :range="strategyTypes" range-key="name" @change="strategyTypeChange">
+					<view class="picker-value">{{strategyType.name}}</view>
+				</picker>
+			</uni-forms-item>
 			<uni-forms-item name="remarks" label="备注">
 				<uni-easyinput placeholder="请输入" type="textarea" v-model="formData.remarks" trim="both"></uni-easyinput>
 			</uni-forms-item>
@@ -52,7 +62,15 @@
 				planType: {
 					name: ''
 				},
+				operateType: {
+					name: ''
+				},
+				strategyType: {
+					name: ''
+				},
 				accountTypes: [],
+				operateTypes: [],
+				strategyTypes: [],
 				rules: {
 					...getValidator(Object.keys(formData))
 				}
@@ -82,14 +100,37 @@
 						this.formData.planName = planInfo.planName;
 						this.formData.remarks = planInfo.remarks;
 						this.planType = planInfo.planType;
+						this.operateType = planInfo.operateType;
+						this.strategyType = planInfo.strategyType;
 					}
 				})
 			},
 			getAccountTypes() {
-				db.collection(typesDB).where('classify == "accountType"').get().then(res => {
-					this.accountTypes = res.result.data
-					if (!this.planType.name) {
-						this.planType = this.accountTypes[0]
+				db.collection(typesDB).get().then(res => {
+					if (res.result && res.result.data) {
+						this.accountTypes = [];
+						this.operateTypes = [];
+						this.strategyTypes = [];
+						res.result.data.forEach(item => {
+							switch (item.classify) {
+								case 'accountType':
+									if (item.relationType === 'floatAsset') {
+										this.accountTypes.push(item)
+									}
+									break
+								case 'operateType':
+									this.operateTypes.push(item)
+									break
+								case 'strategyType':
+									this.strategyTypes.push(item)
+									break
+							}
+						})
+						if (!this.planType.name) {
+							this.planType = this.accountTypes[0];
+							this.operateType = this.operateTypes[0];
+							this.strategyType = this.strategyTypes[0];
+						}
 					}
 				}).catch(() => {
 					uni.showToast({
@@ -100,6 +141,12 @@
 			},
 			accountTypeChange(event) {
 				this.planType = this.accountTypes[Number(event.detail.value)]
+			},
+			operateTypeChange(event) {
+				this.operateType = this.operateTypes[Number(event.detail.value)]
+			},
+			strategyTypeChange(event) {
+				this.strategyType = this.strategyTypes[Number(event.detail.value)]
 			},
 			/**
 			 * 触发表单提交
@@ -121,6 +168,8 @@
 					const updateParams = {
 						...this.formData,
 						planType: this.planType,
+						operateType: this.operateType,
+						strategyType: this.strategyType,
 						updateDate: time
 					}
 					db.collection(planDB).where({
@@ -148,6 +197,8 @@
 						userId: this.userId,
 						...this.formData,
 						planType: this.planType,
+						operateType: this.operateType,
+						strategyType: this.strategyType,
 						isTotalProfit: true,
 						preAdvise: 1,
 						totalPercentage: 0,

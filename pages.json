@@ -24,7 +24,7 @@
 		"style": {
 			"navigationBarTitleText": "操作记录"
 		}
-	},{
+	}, {
 		"path": "pages/assets/index",
 		"style": {
 			"navigationBarTitleText": "资产"
@@ -38,11 +38,6 @@
 		"path": "pages/assets/detail",
 		"style": {
 			"navigationBarTitleText": "账户详情"
-		}
-	}, {
-		"path": "pages/tools/index",
-		"style": {
-			"navigationBarTitleText": "工具"
 		}
 	}],
 	"tabBar": {
@@ -69,11 +64,6 @@
 			"iconPath": "static/images/zichan.png",
 			"selectedIconPath": "static/images/zichan-active.png",
 			"text": "资产"
-		}, {
-			"pagePath": "pages/tools/index",
-			"iconPath": "static/images/gongju.png",
-			"selectedIconPath": "static/images/gongju-active.png",
-			"text": "工具"
 		}]
 	},
 	"globalStyle": {

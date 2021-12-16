@@ -1,6 +1,6 @@
 <template>
 	<view class="no-data">
-		<text class="iconfont">&#xe600;</text>
+		<text class="iconfont">&#xe642;</text>
 		<slot name="text">
 			<view>暂无数据</view>
 		</slot>

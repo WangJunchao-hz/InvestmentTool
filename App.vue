@@ -170,9 +170,9 @@
 	@font-face {
 		font-family: 'iconfont';
 		/* Project id 2667753 */
-		src: url('//at.alicdn.com/t/font_2667753_9javve9llpo.woff2?t=1626170109659') format('woff2'),
-			url('//at.alicdn.com/t/font_2667753_9javve9llpo.woff?t=1626170109659') format('woff'),
-			url('//at.alicdn.com/t/font_2667753_9javve9llpo.ttf?t=1626170109659') format('truetype');
+		src: url('//at.alicdn.com/t/font_2667753_2wdb95g8big.woff2?t=1639462601269') format('woff2'),
+			url('//at.alicdn.com/t/font_2667753_2wdb95g8big.woff?t=1639462601269') format('woff'),
+			url('//at.alicdn.com/t/font_2667753_2wdb95g8big.ttf?t=1639462601269') format('truetype');
 	}
 
 	.iconfont {
@@ -402,5 +402,29 @@
 				}
 			}
 		}
+	}
+
+	.buy-long {
+		position: relative;
+		top: -1px;
+		margin-right: 4px;
+		display: inline-block;
+		padding: 0 4px;
+		background-color: rgba(103, 194, 58, 0.18);
+		border-radius: 2px;
+		color: #67C23A;
+		font-size: 11px;
+	}
+
+	.sell-short {
+		position: relative;
+		top: -1px;
+		margin-right: 4px;
+		display: inline-block;
+		padding: 0 4px;
+		background-color: rgba(245, 108, 108, 0.18);
+		border-radius: 2px;
+		color: #F56C6C;
+		font-size: 11px;
 	}
 </style>

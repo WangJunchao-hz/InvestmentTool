@@ -11,6 +11,10 @@
 						<view class="list-item__body">
 							<view class="list-item__body-title">
 								<text>
+									<text class="buy-long" v-if="subList.operateType&&subList.operateType.
+field === 'buyLong'">多</text>
+									<text class="sell-short" v-else-if="subList.operateType&&subList.operateType.
+field === 'sellShort'">空</text>
 									{{subList.planName}}
 									<text
 										:class="subList.isTotalProfit? 'success' : 'danger'">({{subList.totalProfitAdnLoss || 0}})</text>
@@ -23,10 +27,9 @@
 					</template>
 					<template #footer>
 						<view class="list-item__footer primary">
-							<text
-								:class="subList.isTotalProfit? 'success' : 'danger'">{{subList.totalPercentage}}%</text>
+							<text :class="subList.isProfit? 'success' : 'danger'">{{subList.cumulativeNum || 0}}</text>
 							<text v-if="subList.opType === 'sell'" style="margin-left: 18px;">
-								建议仓位: {{subList.preAdvise}}</text>
+								加仓价: {{subList.increasePrice || 0}}</text>
 						</view>
 					</template>
 				</uni-list-item>

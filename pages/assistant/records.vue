@@ -130,11 +130,14 @@
 				db.collection(plan).where({
 					_id: this.planId
 				}).update({
-					isTotalProfit: params.isTotalProfit || true,
+					isTotalProfit: params.isTotalProfit === false ? false : true,
 					preAdvise: params.preAdvise || 1,
 					totalPercentage: params.totalPercentage || 0,
 					totalProfitAdnLoss: params.totalProfitAdnLoss || 0,
 					opType: params.opType,
+					cumulativeNum: params.cumulativeNum || 0,
+					increasePrice: params.increasePrice || 0,
+					isProfit: params.isProfit === false ? false : true,
 					updateDate: params.updateDate
 				});
 			}

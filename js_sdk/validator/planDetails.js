@@ -2,6 +2,20 @@
 
 
 const validator = {
+  "buyPrice": {
+    "rules": [
+      {
+        "required": true
+      },
+      {
+        "format": "double"
+      },
+      {
+        "minimum": 0
+      }
+    ],
+    "label": "买入价格"
+  },
   "buyAmount": {
     "rules": [
       {
@@ -16,6 +30,20 @@ const validator = {
     ],
     "label": "买入金额"
   },
+  "sellPrice": {
+    "rules": [
+      {
+        "required": true
+      },
+      {
+        "format": "double"
+      },
+      {
+        "minimum": 0
+      }
+    ],
+    "label": "卖出价格"
+  },
   "sellAmount": {
     "rules": [
       {
@@ -29,6 +57,21 @@ const validator = {
       }
     ],
     "label": "卖出金额"
+  },
+  "position": {
+    "rules": [
+      {
+        "required": true
+      },
+      {
+        "format": "int"
+      },
+      {
+        "minimum": 1
+      }
+    ],
+    "label": "仓位",
+    "defaultValue": 1
   },
   "targetPercent": {
     "rules": [
@@ -45,21 +88,6 @@ const validator = {
     ],
     "label": "加仓百分比",
     "defaultValue": 10
-  },
-  "position": {
-    "rules": [
-      {
-        "required": true
-      },
-      {
-        "format": "int"
-      },
-      {
-        "minimum": 1
-      }
-    ],
-    "label": "仓位",
-    "defaultValue": 1
   }
 }
 
