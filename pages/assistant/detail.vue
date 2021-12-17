@@ -455,7 +455,9 @@
 				if (params && params._id) {
 					delete params._id
 				}
-				this.addRecord(params);
+				if (this.opType !== 2) {
+					this.addRecord(params);
+				}
 				this.updatePlan({
 					isTotalProfit: params.isTotalProfit,
 					preAdvise: params.preAdvise,
@@ -481,6 +483,7 @@
 					params.preAdvise = params.position;
 					params.sellAmount = 0;
 					params.profitAdnLoss = 0;
+					params.percentage = 0;
 				} else {
 					params.totalBuyAmount = params.buyAmount;
 					params.onceBuyAmount = params.buyAmount;
@@ -564,7 +567,7 @@
 
 				// 盈亏累计
 				if (params.isProfit === lastInfo.isProfit) {
-					params.cumulativeNum++
+					params.cumulativeNum = (params.cumulativeNum || 0) + 1
 				} else {
 					params.cumulativeNum = 1
 				}
